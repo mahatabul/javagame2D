@@ -1,0 +1,13 @@
+1
+/Mapping Data/forest.txt
+1296
+1264
+1
+6
+1
+1
+1
+0
+3
+0
+Wood Sword
