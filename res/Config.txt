@@ -1,2 +1,2 @@
-musicVolume=1.4901161E-8
+musicVolume=0.20000002
 seEnabled=true
