@@ -272,7 +272,7 @@ public class Entity {
 
                 showDialogue();
             }
-        }, 2000, 2000);
+        }, 3000, 3000);
     }
 
     private void showDialogue() {

@@ -16,8 +16,7 @@ public class Main {
 
         BufferedImage icon;
         try {
-//            icon = ImageIO.read(Objects.requireNonNull(Main.class.getResourceAsStream("res/icon.png")));
-           icon =  ImageIO.read(Objects.requireNonNull(Main.class.getResourceAsStream("/icon.png")));
+            icon =  ImageIO.read(Objects.requireNonNull(Main.class.getResourceAsStream("/icon.png")));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

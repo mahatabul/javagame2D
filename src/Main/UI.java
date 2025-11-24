@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class UI {
     GamePanel gp;
     Graphics2D g2;
-    Font BBh, Jersey, Pixelify, Roboto, Varela;
+    Font BBh, Jersey, Pixelify, Roboto, Varela, bangla;
     public float titleFontsize = 80, otherFontsize = 35, dlgFontsize = 26;
     public int commandNum = 0;
     public boolean showControlsWindow = false;
@@ -47,6 +47,8 @@ public class UI {
             InputStream is;
             is = getClass().getResourceAsStream("/font/BBHSansBogle-Regular.ttf");
             BBh = Font.createFont(Font.TRUETYPE_FONT, is);
+            is = getClass().getResourceAsStream("/font/bangla.ttf");
+            bangla = Font.createFont(Font.TRUETYPE_FONT, is);
             is = getClass().getResourceAsStream("/font/Jersey25-Regular.ttf");
             Jersey = Font.createFont(Font.TRUETYPE_FONT, is);
             // font/PixelifySans-Regular.ttf
@@ -317,7 +319,7 @@ public class UI {
         int x = gp.finalTileSize * 3, y = gp.finalTileSize / 2, width = (gp.scrWidth - (gp.finalTileSize * 4)), height = gp.finalTileSize * 4;
         drawSubWindow(x, y, width, height);
 
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, dlgFontsize));
+        g2.setFont(bangla.deriveFont(Font.PLAIN, dlgFontsize));
         x += gp.finalTileSize;
         y += gp.finalTileSize;
         g2.drawString(currentDialogue, x, y);

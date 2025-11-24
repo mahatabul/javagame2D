@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // World Settings
     public int maxWorldCol = 100;
-    public int maxWorldRow = 120;
+    public int maxWorldRow = 100;
     public final int worldTotalWidth = finalTileSize * maxWorldCol;
     public final int worldTotalHeight = finalTileSize * maxWorldRow;
 
@@ -238,7 +238,7 @@ public class GamePanel extends JPanel implements Runnable {
         music.setVolume(ui.musicVolume);
         tempScreen = new BufferedImage(scrnWidth2, scrnHeight2, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D) tempScreen.getGraphics();
-//        setFullscreen();
+        setFullscreen();
     }
 
     public void setFullscreen() {

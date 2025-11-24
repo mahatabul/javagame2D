@@ -39,10 +39,11 @@ public class NPC_rem extends Entity {
     }
 
     public void setDialogue() {
-        dialogues[0] = "konnichiwa Subaru-kun";
-        dialogues[1] = "You're here for my Feet pics!?";
-        dialogues[2] = "Fine If you do this quest";
-        dialogues[3] = "I will let you have a peek!";
+//        dialogues[0] = "konnichiwa Subaru-kun";
+        dialogues[0]="কনিচিওা সুবারু কুন ";
+        dialogues[1] = "তুমি আমার পায়ের ছবির জন্য এখানে!?";
+        dialogues[2] = "ঠিক আছে, যদি তুমি এই কোয়েস্টটা করো";
+        dialogues[3] = "আমি তোমাকে একটা ঝলক দেখাব!";
     }
 
     public void setAction() {
