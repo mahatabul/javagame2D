@@ -12,6 +12,7 @@ import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -44,6 +45,9 @@ public class GamePanel extends JPanel implements Runnable {
     // Config
 
     Config config = new Config(this);
+
+    // just a flag
+    boolean flag = true;
 
 
     // Save-Load related
@@ -150,7 +154,9 @@ public class GamePanel extends JPanel implements Runnable {
                     if (!monster[i].alive) {
                         monster[i] = null;
                     }
-
+//                    if(Objects.equals(monster[i].name, "Betelgeuse")){
+//
+//                    }
                 }
             }
             // projectile

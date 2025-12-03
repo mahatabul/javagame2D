@@ -26,6 +26,7 @@ public class Betelgeuse extends Entity {
         attackArea.width = 48;
         attackArea.height = 48;
 
+
         projectile = new FireBall(gp);
 
         getEntityImg();
@@ -53,6 +54,19 @@ public class Betelgeuse extends Entity {
 
 
     public void setAction(){
+        actionLockCounter++;
+
+
+        if(getXpos(gp.player) <= entityWorldXPos+Radius && getXpos(gp.player) >= entityWorldXPos-Radius){
+            chasePlayer(60, this.flag);
+            this.flag = !this.flag;
+        }
+        else{
+//            moveRandomly();
+        }
+    }
+
+    void moveRandomly(){
         actionLockCounter++;
 
         if (actionLockCounter == 170) {
