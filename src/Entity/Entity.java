@@ -257,7 +257,7 @@ public class Entity {
 
         dialogueIdx = 0;
         showDialogue();
-
+        // time / dialogue counter for dialogue
         dialogueTimer = new Timer();
         dialogueTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -272,7 +272,7 @@ public class Entity {
 
                 showDialogue();
             }
-        }, 3000, 3000);
+        }, 3000, 3500);
     }
 
     private void showDialogue() {
