@@ -7,24 +7,37 @@ import Objects.FireBall;
 import java.util.Random;
 
 public class Betelgeuse extends Entity {
-    public Betelgeuse(GamePanel gp){
+    public Betelgeuse(GamePanel gp, double x, double y){
         super(gp);
         name = "Betelgeuse";
         entitySpeed = 2;
-        maxLife = 1000;
+        maxLife = 100;
         life = maxLife;
         type = 2;
         attack = 10;
         defense = 3;
         exp = 100;
 
+        spawnX = x;
+        spawnY = y;
+
+        entityWorldXPos = (int) (gp.finalTileSize*spawnX);
+        entityWorldYPos = (int) (gp.finalTileSize*spawnY);
+
+        // chase range parameters
+        X0 = 72;
+        X1 = 89;
+        Y0 = 70;
+        Y1 = 84;
+
+
         solidAreaDefaultX = solidArea.x = 3;
         solidAreaDefaultX = solidArea.y = 18;
         solidArea.width = 42;
         solidArea.height = 30;
 
-        attackArea.width = 48;
-        attackArea.height = 48;
+        attackArea.width = 20;
+        attackArea.height = 20;
 
 
         projectile = new FireBall(gp);
@@ -34,7 +47,7 @@ public class Betelgeuse extends Entity {
     }
 
     private void getAttackImage() {
-
+        ;
     }
 
 
@@ -93,6 +106,13 @@ public class Betelgeuse extends Entity {
                 projectile.set(entityWorldXPos, entityWorldYPos, direction, true, this);
                 gp.projectileList.add(projectile);
             }
+
+            if(entityWorldXPos <= X0+5) direction = "right";
+            else if(entityWorldXPos >= X1-5) direction = "left";
+
+            if(entityWorldYPos <= Y0+5) direction = "down";
+            else if(entityWorldYPos >= Y1-5) direction = "up";
+
             actionLockCounter = 0;
         }
     }

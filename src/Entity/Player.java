@@ -31,8 +31,8 @@ public class Player extends Entity {
         solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 12;
-        solidArea.width = gamePanel.finalTileSize - 2 * solidArea.x;
-        solidArea.height = gamePanel.finalTileSize - 2 * solidArea.y;
+        solidArea.width = gamePanel.finalTileSize - 3 * solidArea.x;
+        solidArea.height = gamePanel.finalTileSize - 3 * solidArea.y;
 
         attackArea.width = 48;
         attackArea.height = 48;
@@ -44,11 +44,12 @@ public class Player extends Entity {
         getPlayerImage();
         getAttackImage();
         setItems();
+
     }
 
     public void setDefaultValue() {
-        entityWorldXPos = gamePanel.finalTileSize * 27;
-        entityWorldYPos = gamePanel.finalTileSize * 27;
+        entityWorldXPos = gamePanel.finalTileSize * 72;
+        entityWorldYPos = gamePanel.finalTileSize * 69;
         entitySpeed = 4;
         direction = "down";
         standbyFlag = true;

@@ -48,8 +48,16 @@ public class Entity {
 
 
     // aggro radius in pixel
-    public double Radius = 5000.0;
+    public double Radius = 1000.0;
     public boolean flag = true;
+
+
+    // chase or move around range
+    public double X0, X1, Y0, Y1;
+
+    // spawn location
+    // each entity is responsible for their own spawn location
+    public double spawnX, spawnY;
 
 
 
@@ -317,22 +325,21 @@ public class Entity {
             double playerX = getXpos(gp.player);
             double playerY = getYpos(gp.player);
 
-            if(Math.pow(playerX-this.entityWorldXPos, 2)+Math.pow(playerY-this.entityWorldYPos, 2)<=Radius*Radius){
-                // implies that player gets inside aggro range
+            if (Math.pow(playerX - this.entityWorldXPos, 2) + Math.pow(playerY - this.entityWorldYPos, 2) <= Radius * Radius) {
+                    // implies that player gets inside aggro range
 
-                if(playerX<=this.entityWorldXPos && flag){
-                    direction = "left";
+                    if (playerX <= this.entityWorldXPos && flag) {
+                        direction = "left";
+                    } else if (playerX > this.entityWorldXPos && flag) {
+                        direction = "right";
+                    }
+                    if (playerY <= this.entityWorldYPos && !flag) {
+                        direction = "up";
+                    } else if (playerY > this.entityWorldYPos && !flag) {
+                        direction = "down";
+                    }
                 }
-                else if(playerX>this.entityWorldXPos && flag){
-                    direction = "right";
-                }
-                if(playerY<=this.entityWorldYPos && !flag){
-                    direction = "up";
-                }
-                else if(playerY>this.entityWorldYPos && !flag){
-                    direction = "down";
-                }
-            }
+
 
             actionLockCounter = 0;
         }

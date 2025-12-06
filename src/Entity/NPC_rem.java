@@ -6,10 +6,11 @@ import Main.GamePanel;
 public class NPC_rem extends Entity {
     public NPC_rem(GamePanel gp, int x, int y) {
         super(gp);
-        entityWorldXPos = x;
-        entityWorldYPos = y;
+        entityWorldXPos = gp.finalTileSize*x;
+        entityWorldYPos = gp.finalTileSize*y;
         direction = "down";
         entitySpeed = 1;
+        standbyFlag = true;
         getEntityImg();
         setDialogue();
     }
@@ -51,20 +52,20 @@ public class NPC_rem extends Entity {
 
 
         if (actionLockCounter == 170) {
-            int i = (int) (Math.random() * 100) + 1;
-
-            if (i <= 25) {
-                direction = "up";
-            }
-            if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75 && i <= 100) {
-                direction = "right";
-            }
+//            int i = (int) (Math.random() * 100) + 1;
+//
+//            if (i <= 25) {
+//                direction = "up";
+//            }
+//            if (i > 25 && i <= 50) {
+//                direction = "down";
+//            }
+//            if (i > 50 && i <= 75) {
+//                direction = "left";
+//            }
+//            if (i > 75 && i <= 100) {
+//                direction = "right";
+//            }
             actionLockCounter = 0;
         }
 
