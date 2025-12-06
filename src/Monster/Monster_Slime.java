@@ -6,7 +6,7 @@ import Main.GamePanel;
 import java.util.Random;
 
 public class Monster_Slime extends Entity {
-    public Monster_Slime(GamePanel gp) {
+    public Monster_Slime(GamePanel gp, double x, double y) {
         super(gp);
         name = "Green Slime";
         entitySpeed = 1;
@@ -16,6 +16,20 @@ public class Monster_Slime extends Entity {
         attack = 2;
         defense = 0;
         exp = 1;
+
+        spawnX = x;
+        spawnY = y;
+
+        this.entityWorldXPos = (int) (gp.finalTileSize*spawnX);
+        this.entityWorldYPos = (int) (gp.finalTileSize*spawnY);
+
+        // move around distance limiter
+        this.X0 = this.entityWorldXPos - gp.finalTileSize*5;
+        this.X1 = this.entityWorldXPos + gp.finalTileSize*5;
+        this.Y0 = this.entityWorldYPos - gp.finalTileSize*5;
+        this.Y1 = this.entityWorldYPos + gp.finalTileSize*5;
+
+        Radius = 5*48;
 
         solidAreaDefaultX = solidArea.x = 3;
         solidAreaDefaultX = solidArea.y = 18;
@@ -45,25 +59,37 @@ public class Monster_Slime extends Entity {
     public void setAction() {
         actionLockCounter++;
 
-        if (actionLockCounter == 170) {
-            Random random = new Random();
-            int i = random.nextInt(100) + 1;
+        if(getXpos(gp.player) <= entityWorldXPos+Radius && getXpos(gp.player) >= entityWorldXPos-Radius){
+            chasePlayer(60, this.flag);
+            this.flag = !this.flag;
 
-            if (i <= 25) {
-                direction = "up";
-            }
-            if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75) {
-                direction = "right";
-            }
-            actionLockCounter = 0;
         }
+        else{
+            if (actionLockCounter == 170) {
+                Random random = new Random();
+                int i = random.nextInt(100) + 1;
 
+                if (i <= 25) {
+                    direction = "up";
+                }
+                if (i > 25 && i <= 50) {
+                    direction = "down";
+                }
+                if (i > 50 && i <= 75) {
+                    direction = "left";
+                }
+                if (i > 75) {
+                    direction = "right";
+                }
 
+                if (entityWorldXPos <= X0 + 5) direction = "right";
+                else if (entityWorldXPos >= X1 - 5) direction = "left";
+
+                if (entityWorldYPos <= Y0 + 5) direction = "down";
+                else if (entityWorldYPos >= Y1 - 5) direction = "up";
+
+                actionLockCounter = 0;
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -35,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     int scrnWidth2 = scrWidth;
     int scrnHeight2 = scrHeight;
     BufferedImage tempScreen;
-    Graphics2D g2;
+    public Graphics2D g2;
 
     // Sound and Effects
     public Sound music = new Sound();
@@ -44,6 +45,9 @@ public class GamePanel extends JPanel implements Runnable {
     // Config
 
     Config config = new Config(this);
+
+    // just a flag
+    boolean flag = true;
 
 
     // Save-Load related
@@ -66,7 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, this.kh);
     public Entity[] staticObjects = new Entity[10];
     public Entity[] npc = new Entity[10];
-    public Entity[] monster = new Entity[10];
+    public Entity[] monster = new Entity[30];
     ArrayList<Entity> entityList = new ArrayList<>();
     public ArrayList<Entity> projectileList = new ArrayList<>();
 
@@ -122,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
                 drawCount++;
             }
 
-            if (timer >= 1000000000) {
+            if (timer >= 1000000000) {  //// terminal debug ////
                 System.out.println("FPS: " + drawCount);
                 drawCount = 0;
                 timer = 0;
@@ -150,7 +154,9 @@ public class GamePanel extends JPanel implements Runnable {
                     if (!monster[i].alive) {
                         monster[i] = null;
                     }
-
+//                    if(Objects.equals(monster[i].name, "Betelgeuse")){
+//
+//                    }
                 }
             }
             // projectile

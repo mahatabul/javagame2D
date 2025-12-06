@@ -27,7 +27,7 @@ public class TileManager {
         this.gamePanel = gp;
         
         // reading tile collision data
-        InputStream is = getClass().getResourceAsStream("/Collision Data/forestCollision.txt");
+        InputStream is = getClass().getResourceAsStream("/Collision Data/collision.txt");
         assert is != null;
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
@@ -66,14 +66,12 @@ public class TileManager {
         mapTileNumber = new int[gamePanel.maxWorldCol][gamePanel.maxWorldRow];
 
         // storing map names
-        maps = new String[5];
+        maps = new String[1];
 
-        maps[0] = "/Mapping Data/Roswaal Mansion Outside.txt";
-        maps[1] = "/Mapping Data/forest.txt";
-        maps[2] = "/Mapping Data/Lugunica.txt";
+        maps[0] = "/Mapping Data/forest.txt";
 
-        loadMap(maps[1]);
-        currentMapIdx = 1;
+        loadMap(maps[0]);
+        currentMapIdx = 0;
     }
 
     public void getTileImage() {
@@ -94,7 +92,7 @@ public class TileManager {
         try {
             tiles[index] = new Tiles();
             //tiles[index].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tiles/Roswaal Mansion Outside/" + imagePath + ".png")));
-            tiles[index].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tiles/0002/" + imagePath)));
+            tiles[index].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Tiles/" + imagePath)));
             tiles[index].image = utool.scaleImage(tiles[index].image, gamePanel.finalTileSize, gamePanel.finalTileSize);
             tiles[index].collision = collisionON;
 
