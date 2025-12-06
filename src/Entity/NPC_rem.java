@@ -40,36 +40,19 @@ public class NPC_rem extends Entity {
     }
 
     public void setDialogue() {
-//        dialogues[0] = "konnichiwa Subaru-kun";
         dialogues[0]="কনিচিওা সুবারু কুন ";
         dialogues[1] = "তুমি আমার পায়ের ছবির জন্য এখানে!?";
         dialogues[2] = "ঠিক আছে, যদি তুমি এই কোয়েস্টটা করো";
         dialogues[3] = "আমি তোমাকে একটা ঝলক দেখাব!";
     }
-
-    public void setAction() {
-        actionLockCounter++;
-
-
-        if (actionLockCounter == 170) {
-//            int i = (int) (Math.random() * 100) + 1;
-//
-//            if (i <= 25) {
-//                direction = "up";
-//            }
-//            if (i > 25 && i <= 50) {
-//                direction = "down";
-//            }
-//            if (i > 50 && i <= 75) {
-//                direction = "left";
-//            }
-//            if (i > 75 && i <= 100) {
-//                direction = "right";
-//            }
-            actionLockCounter = 0;
+    @Override
+    public void update() {
+        // NPC stays still - only update sprite animation for idle effect
+        spriteCounter++;
+        if (spriteCounter > 10) {
+            spriteNum = !spriteNum;
+            spriteCounter = 0;
         }
-
-
     }
 
     public void speak() {

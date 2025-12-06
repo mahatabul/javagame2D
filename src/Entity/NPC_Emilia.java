@@ -46,31 +46,14 @@ public class NPC_Emilia extends Entity {
         dialogues[3] = "She has no ill intention.";
         dialogues[4] = "I bet she likes to mess with you.";
     }
-
-
-    public void setAction() {
-        actionLockCounter++;
-
-
-        if (actionLockCounter == 170) {
-//            int i = (int) (Math.random() * 100) + 1;
-//
-//            if (i <= 25) {
-//                direction = "up";
-//            }
-//            if (i > 25 && i <= 50) {
-//                direction = "down";
-//            }
-//            if (i > 50 && i <= 75) {
-//                direction = "left";
-//            }
-//            if (i > 75 && i <= 100) {
-//                direction = "right";
-//            }
-            actionLockCounter = 0;
+    @Override
+    public void update() {
+        // NPC stays still - only update sprite animation for idle effect
+        spriteCounter++;
+        if (spriteCounter > 10) {
+            spriteNum = !spriteNum;
+            spriteCounter = 0;
         }
-
-
     }
 
     public void speak() {

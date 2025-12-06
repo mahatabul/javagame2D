@@ -12,12 +12,8 @@ public class AssetHandler {
         this.gamePanel = gp;
     }
 
-    public void setObjects() {
-        // Removing these objects bcz we have to rewrite them anyway
-    }
-
     public void setNPC() {
-        gamePanel.npc[0] = new NPC_rem(gamePanel, 33, 33);
+        gamePanel.npc[0] = new NPC_rem(gamePanel, 30, 45);
         gamePanel.npc[1] = new NPC_Emilia(gamePanel,50, 50);
     }
 

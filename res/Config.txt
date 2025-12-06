@@ -1,2 +1,2 @@
-musicVolume=0.20000002
-seEnabled=true
+musicVolume=1.4901161E-8
+seEnabled=false
