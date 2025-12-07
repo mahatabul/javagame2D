@@ -48,8 +48,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValue() {
-        entityWorldXPos = gamePanel.finalTileSize * 72;
-        entityWorldYPos = gamePanel.finalTileSize * 69;
+        entityWorldXPos = gamePanel.finalTileSize * 24;
+        entityWorldYPos = gamePanel.finalTileSize * 21;
         entitySpeed = 4;
         direction = "down";
         standbyFlag = true;

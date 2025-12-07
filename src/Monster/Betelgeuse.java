@@ -10,7 +10,7 @@ public class Betelgeuse extends Entity {
     public Betelgeuse(GamePanel gp, double x, double y){
         super(gp);
         name = "Betelgeuse";
-        entitySpeed = 2;
+        entitySpeed = 3;
         maxLife = 100;
         life = maxLife;
         type = 2;
@@ -25,6 +25,7 @@ public class Betelgeuse extends Entity {
         entityWorldYPos = (int) (gp.finalTileSize*spawnY);
 
         // chase range parameters
+        Radius = 11*48;
         X0 = 72;
         X1 = 89;
         Y0 = 70;
@@ -47,7 +48,7 @@ public class Betelgeuse extends Entity {
     }
 
     private void getAttackImage() {
-        ;
+
     }
 
 
@@ -75,6 +76,7 @@ public class Betelgeuse extends Entity {
             this.flag = !this.flag;
         }
         else{
+            standbyFlag = true;
 //            moveRandomly();
         }
     }

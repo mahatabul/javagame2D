@@ -40,11 +40,13 @@ public class NPC_Emilia extends Entity {
 
 
     public void setDialogue() {
-        dialogues[0] = "Ara Subaru-kun!";
-        dialogues[1] = "Did you get used to the mansion?";
-        dialogues[2] = "Ram called you Barusu?";
-        dialogues[3] = "She has no ill intention.";
-        dialogues[4] = "I bet she likes to mess with you.";
+        dialogues[0] = "সুবারু! সুবারু!";
+        dialogues[1] = "আলহামদুলিল্লাহ, তুমি এখানে আছো।";
+        dialogues[2] = "দেখো গ্রামটা কাদামাটি দানবদের দখলে চলে গেছে।";
+        dialogues[3] = "দয়া করে এই দানবদের পরাস্ত কর।";
+        dialogues[4] = "এগুলো সামলে নেওয়ার পর রেমের খামারে যাও।";
+        dialogues[5] = "তার খামারের অবস্থা আরও ভয়াবহ।";
+
     }
     @Override
     public void update() {

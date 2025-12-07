@@ -40,10 +40,13 @@ public class NPC_rem extends Entity {
     }
 
     public void setDialogue() {
-        dialogues[0]="কনিচিওা সুবারু কুন ";
-        dialogues[1] = "তুমি আমার পায়ের ছবির জন্য এখানে!?";
-        dialogues[2] = "ঠিক আছে, যদি তুমি এই কোয়েস্টটা করো";
-        dialogues[3] = "আমি তোমাকে একটা ঝলক দেখাব!";
+        dialogues[0] = "মাস্টার সুবারু!";
+        dialogues[1] = "অবশেষে আপনি পৌঁছেছেন।";
+        dialogues[2] = "দয়া করে খামারটি বাঁচান।";
+        dialogues[3] = "অন্যথায় গ্রামের মানুষ না খেয়ে মারা যাবে।";
+        dialogues[4] = "পরে, দক্ষিণ-পূর্ব ভ্রমণ করুন।";
+        dialogues[5] = "আপনি সেখানে নাটের গুরু খুঁজে পাবেন।";
+
     }
     @Override
     public void update() {

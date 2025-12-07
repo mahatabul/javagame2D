@@ -13,8 +13,8 @@ public class AssetHandler {
     }
 
     public void setNPC() {
-        gamePanel.npc[0] = new NPC_rem(gamePanel, 30, 45);
-        gamePanel.npc[1] = new NPC_Emilia(gamePanel,50, 50);
+        gamePanel.npc[0] = new NPC_rem(gamePanel, 31, 43);
+        gamePanel.npc[1] = new NPC_Emilia(gamePanel,60, 35);
     }
 
     public void setMonster() {
