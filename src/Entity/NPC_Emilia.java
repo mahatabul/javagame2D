@@ -14,12 +14,6 @@ public class NPC_Emilia extends Entity {
         setDialogue();
     }
 
-    public NPC_Emilia(GamePanel gp) {
-        super(gp);
-        direction = "down";
-        entitySpeed = 1;
-        getEntityImg();
-    }
 
 
     @Override

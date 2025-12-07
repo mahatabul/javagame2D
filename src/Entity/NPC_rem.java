@@ -15,13 +15,6 @@ public class NPC_rem extends Entity {
         setDialogue();
     }
 
-    public NPC_rem(GamePanel gp) {
-        super(gp);
-        direction = "down";
-        entitySpeed = 1;
-        getEntityImg();
-        setDialogue();
-    }
 
     @Override
     public void getEntityImg() {

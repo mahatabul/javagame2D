@@ -3,7 +3,6 @@ package Entity;
 import Main.GamePanel;
 import Main.KeyHandler;
 import Objects.FireBall;
-import Objects.Heart;
 import Objects.Weapon_woodsword;
 import Objects.woodShield;
 
@@ -18,7 +17,7 @@ public class Player extends Entity {
     public final int scrXpos;
     public final int scrYpos;
     public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int inventorySize = 20;
+//    public final int inventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler kh) {
         super(gp);
