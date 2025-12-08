@@ -195,7 +195,7 @@ public class KeyHandler implements KeyListener {
             rightPressed = true;
         if (asciiCode == KeyEvent.VK_ENTER)
             enterPressed = true;
-        if (asciiCode == KeyEvent.VK_X)
+        if (asciiCode == KeyEvent.VK_X && gp.player.level >= 5)
             shotKeypressed = true;
         if (asciiCode == KeyEvent.VK_C) {
             gp.gameState = gp.characterstate;
