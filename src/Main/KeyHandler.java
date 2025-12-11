@@ -5,8 +5,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
+    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeypressed;
     GamePanel gp;
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed,shotKeypressed;
     float volume = 0.2F;
 
     public KeyHandler(GamePanel gp) {
@@ -15,7 +15,16 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+        if (gp.gameState == gp.inputplayernamestate) {
+            char c = e.getKeyChar();
 
+            // Allow letters, numbers, and spaces
+            if (Character.isLetterOrDigit(c) || c == ' ') {
+                if (gp.player.playername.length() < 10) { // Max 15 characters
+                    gp.player.playername += c;
+                }
+            }
+        }
     }
 
     @Override
@@ -25,6 +34,8 @@ public class KeyHandler implements KeyListener {
         // Title State
         if (gp.gameState == gp.titleState) {
             handleTitlestate(asciiCode);
+        } else if (gp.gameState == gp.inputplayernamestate) {
+            handleNameInputState(asciiCode);
         }
 
         // Play state
@@ -162,9 +173,8 @@ public class KeyHandler implements KeyListener {
             } else if (gp.ui.commandNum == 1) {
                 // save game
                 gp.dataStorage.saveData();
-                gp.ui.gamesaved=true;
-            }
-            else if (gp.ui.commandNum == 2) {
+                gp.ui.gamesaved = true;
+            } else if (gp.ui.commandNum == 2) {
                 // Options
                 gp.previousState = gp.gameState;
                 gp.gameState = gp.optionState;
@@ -172,8 +182,8 @@ public class KeyHandler implements KeyListener {
 
             } else if (gp.ui.commandNum == 3) {
                 // Exit the game
-                gp.dataStorage.saveData();
-                gp.ui.gamesaved=true;
+//                gp.dataStorage.saveData();
+//                gp.ui.gamesaved = true;
                 gp.gameState = gp.titleState;
                 gp.ui.commandNum = 0; // reset when entering play
 
@@ -185,18 +195,12 @@ public class KeyHandler implements KeyListener {
     }
 
     private void handlePlaystate(int asciiCode) {
-        if (asciiCode == KeyEvent.VK_W || asciiCode == KeyEvent.VK_UP)
-            upPressed = true;
-        if (asciiCode == KeyEvent.VK_S || asciiCode == KeyEvent.VK_DOWN)
-            downPressed = true;
-        if (asciiCode == KeyEvent.VK_A || asciiCode == KeyEvent.VK_LEFT)
-            leftPressed = true;
-        if (asciiCode == KeyEvent.VK_D || asciiCode == KeyEvent.VK_RIGHT)
-            rightPressed = true;
-        if (asciiCode == KeyEvent.VK_ENTER)
-            enterPressed = true;
-        if (asciiCode == KeyEvent.VK_X && gp.player.level >= 5)
-            shotKeypressed = true;
+        if (asciiCode == KeyEvent.VK_W || asciiCode == KeyEvent.VK_UP) upPressed = true;
+        if (asciiCode == KeyEvent.VK_S || asciiCode == KeyEvent.VK_DOWN) downPressed = true;
+        if (asciiCode == KeyEvent.VK_A || asciiCode == KeyEvent.VK_LEFT) leftPressed = true;
+        if (asciiCode == KeyEvent.VK_D || asciiCode == KeyEvent.VK_RIGHT) rightPressed = true;
+        if (asciiCode == KeyEvent.VK_ENTER) enterPressed = true;
+        if (asciiCode == KeyEvent.VK_X && gp.player.level >= 5) shotKeypressed = true;
         if (asciiCode == KeyEvent.VK_C) {
             gp.gameState = gp.characterstate;
         }
@@ -220,8 +224,8 @@ public class KeyHandler implements KeyListener {
             if (gp.ui.commandNum == 0) {
                 // Enter New Game
                 gp.player.setDefaultValue();
-                gp.gameState = gp.playState;
-                gp.ui.commandNum = 0; // reset when entering play
+                gp.gameState = gp.inputplayernamestate;
+
             } else if (gp.ui.commandNum == 1) {
                 // load game
                 gp.dataStorage.readData();
@@ -229,13 +233,12 @@ public class KeyHandler implements KeyListener {
                 gp.gameState = gp.playState;
 
 
-            }else if (gp.ui.commandNum == 2) {
+            } else if (gp.ui.commandNum == 2) {
                 // delete save data
                 gp.dataStorage.deleteData();
-                gp.ui.gameDeleted=true;
+                gp.ui.gameDeleted = true;
                 // we can give a popup confirmation or not here
-            }
-            else if (gp.ui.commandNum == 3) {
+            } else if (gp.ui.commandNum == 3) {
                 // options
                 gp.previousState = gp.gameState;
                 gp.gameState = gp.optionState;
@@ -245,6 +248,29 @@ public class KeyHandler implements KeyListener {
                 gp.dataStorage.saveData();
                 System.exit(0);
             }
+        }
+    }
+
+    private void handleNameInputState(int asciiCode) {
+        if (asciiCode == KeyEvent.VK_ENTER) {
+            if (gp.player.playername.trim().length() > 0) { // Make sure name is not empty
+                gp.playSE(1, volume);
+                gp.gameState = gp.playState; // Start the game
+//                gp.playMusic(0); // Start game music
+                gp.ui.commandNum = 0; // reset command
+            }
+        }
+
+        if (asciiCode == KeyEvent.VK_BACK_SPACE) {
+            if (gp.player.playername.length() > 0) {
+                gp.player.playername = gp.player.playername.substring(0, gp.player.playername.length() - 1);
+            }
+        }
+
+        if (asciiCode == KeyEvent.VK_ESCAPE) {
+            // Allow player to go back to title screen
+            gp.gameState = gp.titleState;
+            gp.ui.commandNum = 0;
         }
     }
 
@@ -285,15 +311,10 @@ public class KeyHandler implements KeyListener {
     public void keyReleased(KeyEvent e) {
         int asciiCode = e.getKeyCode();
 
-        if (asciiCode == KeyEvent.VK_W || asciiCode == KeyEvent.VK_UP)
-            upPressed = false;
-        if (asciiCode == KeyEvent.VK_S || asciiCode == KeyEvent.VK_DOWN)
-            downPressed = false;
-        if (asciiCode == KeyEvent.VK_A || asciiCode == KeyEvent.VK_LEFT)
-            leftPressed = false;
-        if (asciiCode == KeyEvent.VK_D || asciiCode == KeyEvent.VK_RIGHT)
-            rightPressed = false;
-        if (asciiCode == KeyEvent.VK_X)
-            shotKeypressed = false;
+        if (asciiCode == KeyEvent.VK_W || asciiCode == KeyEvent.VK_UP) upPressed = false;
+        if (asciiCode == KeyEvent.VK_S || asciiCode == KeyEvent.VK_DOWN) downPressed = false;
+        if (asciiCode == KeyEvent.VK_A || asciiCode == KeyEvent.VK_LEFT) leftPressed = false;
+        if (asciiCode == KeyEvent.VK_D || asciiCode == KeyEvent.VK_RIGHT) rightPressed = false;
+        if (asciiCode == KeyEvent.VK_X) shotKeypressed = false;
     }
 }

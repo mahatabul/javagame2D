@@ -33,13 +33,13 @@ public class NPC_rem extends Entity {
     }
 
     public void setDialogue() {
-        dialogues[0] = "মাস্টার সুবারু!";
+        // সুবারু
+        dialogues[0] = String.format("মাস্টার %s !", gp.player.playername);
         dialogues[1] = "অবশেষে আপনি পৌঁছেছেন।";
-        dialogues[2] = "দয়া করে খামারটি বাঁচান।";
+        dialogues[2] = "দয়া করে খামারটি বাঁচান।";
         dialogues[3] = "অন্যথায় গ্রামের মানুষ না খেয়ে মারা যাবে।";
         dialogues[4] = "পরে, দক্ষিণ-পূর্ব ভ্রমণ করুন।";
         dialogues[5] = "আপনি সেখানে নাটের গুরু খুঁজে পাবেন।";
-
     }
     @Override
     public void update() {
@@ -52,6 +52,7 @@ public class NPC_rem extends Entity {
     }
 
     public void speak() {
+        setDialogue();
         super.speak();
     }
 }

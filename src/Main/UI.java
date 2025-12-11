@@ -10,34 +10,31 @@ import java.util.ArrayList;
 
 
 public class UI {
-    GamePanel gp;
-    Graphics2D g2;
-    Font BBh, Jersey, Pixelify, Roboto, Varela, bangla;
     public float titleFontsize = 80, otherFontsize = 35, dlgFontsize = 26;
     public int commandNum = 0;
     public boolean showControlsWindow = false;
     public String currentDialogue = "";
-
     public int slotcol = 0, slotrow = 0;
-
-    BufferedImage heart_full, heart_half, heart_blank;
-
     public String[] menuItems = {"New Game", "Load Game", "Delete Save Data", "Options", "Exit"};
     public String[] pauseItems = {"Resume Game", "Save Game", "Options", "Exit Game"};
-
     public String[] optionsItems = {"Volume", "SE", "Controls", "Back"};
-
-    // messages
-    ArrayList<String> message = new ArrayList<>();
-    ArrayList<Integer> msgCounter = new ArrayList<>();
-
     public int levelUpmsgCntr = 0;
     public boolean LEVELEDUP = false;
     public int gameSavedCntr = 0;
     public boolean gamesaved = false;
     public int gameDeletedCntr = 0;
     public boolean gameDeleted = false;
-
+    // current volume level (0.0 → 1.0)
+    public float musicVolume = 0.1F;
+    public boolean seEnabled = true;
+    GamePanel gp;
+    Graphics2D g2;
+    Font BBh, Jersey, Pixelify, Roboto, Varela, bangla;
+    BufferedImage heart_full, heart_half, heart_blank;
+    // messages
+    ArrayList<String> message = new ArrayList<>();
+    ArrayList<Integer> msgCounter = new ArrayList<>();
+    int blinkCounter = 0;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -102,6 +99,8 @@ public class UI {
             drawCharacterScrn();
             drawInventory();
 
+        } else if (gp.gameState == gp.inputplayernamestate) {
+            inputplayername();
         } else {
             // Playstate in here
             drawPlayerLife();
@@ -111,40 +110,41 @@ public class UI {
             }
 
         }
-        if (gamesaved && gameSavedCntr<100){
+        if (gamesaved && gameSavedCntr < 100) {
             gameSavedCntr++;
             drawgameSavescrn();
-            if (gameSavedCntr==100){
-                gamesaved=false;
-                gameSavedCntr=0;
+            if (gameSavedCntr == 100) {
+                gamesaved = false;
+                gameSavedCntr = 0;
             }
         }
-        if (gameDeleted && gameDeletedCntr<100){
+        if (gameDeleted && gameDeletedCntr < 100) {
             gameDeletedCntr++;
             drawgamedeletescrn();
-            if (gameDeletedCntr==100){
-                gameDeleted=false;
-                gameDeletedCntr=0;
+            if (gameDeletedCntr == 100) {
+                gameDeleted = false;
+                gameDeletedCntr = 0;
             }
         }
     }
 
     private void drawgameSavescrn() {
         // Window
-        int x = gp.finalTileSize, y = gp.finalTileSize*8, width = (gp.finalTileSize * 5), height = gp.finalTileSize * 2;
+        int x =(int) (gp.finalTileSize*0.5), y = gp.finalTileSize * 9, width = (gp.finalTileSize * 4), height = (int)(gp.finalTileSize * 1.25);
         drawSubWindow(x, y, width, height);
 
-        g2.setFont(Jersey.deriveFont(Font.PLAIN,32f));
-        x += gp.finalTileSize;
-        y += gp.finalTileSize;
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 26f));
+        x += (int) (gp.finalTileSize*0.85);
+        y += (int)(gp.finalTileSize*0.75);
         g2.drawString("Game Saved", x, y);
     }
+
     private void drawgamedeletescrn() {
         // Window
-        int x = gp.finalTileSize, y = gp.finalTileSize*8, width = (gp.finalTileSize * 5), height = gp.finalTileSize * 2;
+        int x = gp.finalTileSize, y = gp.finalTileSize * 8, width = (gp.finalTileSize * 5), height = gp.finalTileSize * 2;
         drawSubWindow(x, y, width, height);
 
-        g2.setFont(Jersey.deriveFont(Font.PLAIN,32f));
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 32f));
         x += gp.finalTileSize;
         y += gp.finalTileSize;
         g2.drawString("Game Deleted", x, y);
@@ -174,7 +174,7 @@ public class UI {
     }
 
     private void drawInventory() {
-        final int frameX = gp.finalTileSize * 9, frameY = gp.finalTileSize, frameWidth = gp.finalTileSize * 6, frameHeight = (int) (gp.finalTileSize * 5);
+        final int frameX = gp.finalTileSize * 9, frameY = gp.finalTileSize, frameWidth = gp.finalTileSize * 6, frameHeight = gp.finalTileSize * 5;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
 
@@ -250,7 +250,7 @@ public class UI {
         g2.drawString(value, textX, textY);
         textY += lineheight;
 
-        value = String.valueOf(gp.player.life + "/" + gp.player.maxLife);
+        value = gp.player.life + "/" + gp.player.maxLife;
         textX = getXforAlignToRightText(value, tailX + adjust);
         g2.drawString(value, textX, textY);
         textY += lineheight;
@@ -325,12 +325,62 @@ public class UI {
         g2.drawString(currentDialogue, x, y);
     }
 
+    public void inputplayername() {
+        g2.setColor(new Color(0, 0, 0, 250));
+        g2.fillRect(0, 0, gp.scrWidth, gp.scrHeight);
+
+        // Title text
+        g2.setFont(bangla.deriveFont(Font.BOLD, 40f));
+        g2.setColor(Color.WHITE);
+        String text = "Enter Your Name:";
+        int x = centerXfortext(text);
+        int y = gp.finalTileSize * 4;
+        g2.drawString(text, x, y);
+
+        // Input box background (dark grey)
+        y += gp.finalTileSize / 2;
+        int boxX = gp.finalTileSize;
+        int boxWidth = gp.scrWidth - gp.finalTileSize * 2;
+        int boxHeight = gp.finalTileSize;
+
+        g2.setColor(new Color(50, 50, 50)); // Dark grey
+        g2.fillRect(boxX, y, boxWidth, boxHeight);
+
+        // Optional: Add a border to the input box
+        g2.setColor(Color.WHITE);
+        g2.drawRect(boxX, y, boxWidth, boxHeight);
+
+        // Player name input text
+        g2.setFont(bangla.deriveFont(Font.PLAIN, 36f));
+        g2.setColor(Color.WHITE);
+        // Add some padding from the left edge
+        y += boxHeight - 15; // Position text vertically centered in the box
+        if (gp.player.playername.isEmpty()) {
+            // Show placeholder text if name is empty
+            x = boxX + gp.finalTileSize * 3;
+            g2.setColor(new Color(150, 150, 150)); // Vague/grey color
+            g2.drawString("Maximum 10 characters", x, y);
+        } else {
+            // Show actual player name
+            x = boxX + gp.finalTileSize * 5;
+            g2.setColor(Color.WHITE);
+            g2.drawString(gp.player.playername, x, y);
+        }
+
+        // Instruction text
+        g2.setFont(bangla.deriveFont(Font.PLAIN, 24f));
+        text = "Press ENTER to confirm";
+        x = centerXfortext(text);
+        y += gp.finalTileSize + 20;
+        g2.drawString(text, x, y);
+    }
+
     public void drawLevelupScrn() {
         // Window
-        int x = (int)(gp.finalTileSize * 5), y = gp.finalTileSize, width = (gp.finalTileSize * 6), height = gp.finalTileSize * 2;
+        int x = gp.finalTileSize * 5, y = gp.finalTileSize, width = (gp.finalTileSize * 6), height = gp.finalTileSize * 2;
         drawSubWindow(x, y, width, height);
 
-        g2.setFont(Jersey.deriveFont(Font.PLAIN,22f));
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 22f));
         x = centerXfortext("Level UP!!");
         y += gp.finalTileSize;
         g2.drawString("Level UP!!", x, y);
@@ -363,7 +413,6 @@ public class UI {
             }
         }
     }
-
 
     public void drawPauseScrn() {
         // 1. Draw semi-transparent dark overlay
@@ -433,7 +482,6 @@ public class UI {
 
     }
 
-
     public void drawTitleScrn(Graphics2D g2) {
         // === Clear Background ===
         g2.setColor(Color.BLACK); // solid black background
@@ -469,7 +517,6 @@ public class UI {
             drawMenuOption(g2, menuItems[i], i, commandNum, textY);
         }
     }
-
 
     private int centerXfortext(String text) {
         int textLen = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
@@ -507,7 +554,6 @@ public class UI {
             g2.drawString(text, x, baseY);
         }
     }
-
 
     public void drawControls(Graphics2D g2) {
         int frameX = gp.finalTileSize;
@@ -580,10 +626,6 @@ public class UI {
         g2.drawRoundRect(x + 2, y + 2, width, height, 25, 25);
     }
 
-
-    // current volume level (0.0 → 1.0)
-    public float musicVolume = 0.1F;
-
     public void increseVolume() {
 
         if (musicVolume < 1.0F) {
@@ -607,9 +649,6 @@ public class UI {
         gp.config.saveConfig();
 
     }
-
-
-    public boolean seEnabled = true;
 
     public void toggleSe() {
         seEnabled = !seEnabled;

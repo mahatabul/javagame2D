@@ -9,11 +9,12 @@ public class DataStore {
     private int xPos, yPos;
     private int lvl, life, str, atk, def, exp, nxtLvlExp, coin;
     private String wpn;
+    private String playername;
     private final String ReadWritepath = new File("res/saveData.txt").getAbsolutePath();
 
     private String mapPath;
 
-    public DataStore(int x, int y,int lv,int lf, int st, int at, int df, int xp, int nlxp, int coin, String wepn, String mpath){
+    public DataStore(int x, int y,int lv,int lf, int st, int at, int df, int xp, int nlxp, int coin, String wepn, String mpath,String playername){
         this.xPos = x;
         this.yPos = y;
         this.mapPath = mpath;
@@ -27,6 +28,7 @@ public class DataStore {
         this.nxtLvlExp = nlxp;
         this.coin = coin;
         this.wpn = wepn;
+        this.playername = playername;
     }
 
     public DataStore(GamePanel gp){
@@ -45,6 +47,7 @@ public class DataStore {
         player.nextlevelexp = this.nxtLvlExp;
         player.coin = this.coin;
         player.currentWeapon.name = this.wpn;
+        player.playername = this.playername;
     }
 
 
@@ -68,8 +71,10 @@ public class DataStore {
             this.nxtLvlExp = gp.player.nextlevelexp;
             this.coin = gp.player.coin;
             this.wpn = gp.player.currentWeapon.name;
+            this.playername = gp.player.playername;
 
             bw.write(1+"\n");
+            bw.write(playername+"\n");
             bw.write(mapPath+"\n");
             bw.write(xPos+"\n");
             bw.write(yPos+"\n");
@@ -107,6 +112,7 @@ public class DataStore {
             }
 
             // Read sequentially
+            playername = br.readLine();
             mapPath = br.readLine();
             xPos = Integer.parseInt(br.readLine());
             yPos = Integer.parseInt(br.readLine());
@@ -183,6 +189,10 @@ public class DataStore {
 
     public String getWpn() {
         return wpn;
+    }
+
+    public String getPlayerName() { // Added getter
+        return playername;
     }
 
 }

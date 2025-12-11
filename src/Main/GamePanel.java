@@ -88,6 +88,8 @@ public class GamePanel extends JPanel implements Runnable {
     public int previousState = 0;
     public final int gameoverstate = 5;
     public final int characterstate = 6;
+    public final int inputplayernamestate = 7;
+    public final int gameWinstate = 8;
 
 
     public GamePanel() {    // constructor              //
@@ -128,6 +130,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (timer >= 1000000000) {  //// terminal debug ////
                 System.out.println("FPS: " + drawCount);
+                System.out.println(player.playername);
                 drawCount = 0;
                 timer = 0;
             }

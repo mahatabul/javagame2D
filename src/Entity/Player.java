@@ -11,12 +11,12 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends Entity {
-    GamePanel gamePanel;
-    KeyHandler keyH;
-
     public final int scrXpos;
     public final int scrYpos;
+    public String playername = "";
     public ArrayList<Entity> inventory = new ArrayList<>();
+    GamePanel gamePanel;
+    KeyHandler keyH;
 //    public final int inventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler kh) {
@@ -35,9 +35,9 @@ public class Player extends Entity {
 
         attackArea.width = 48;
         attackArea.height = 48;
-        if(gamePanel.ui.commandNum == 0){
+        if (gamePanel.ui.commandNum == 0) {
             setDefaultValue();
-        }else  if(gamePanel.ui.commandNum == 1){
+        } else if (gamePanel.ui.commandNum == 1) {
             setSavedValue();
         }
         getPlayerImage();
@@ -52,6 +52,7 @@ public class Player extends Entity {
         entitySpeed = 4;
         direction = "down";
         standbyFlag = true;
+        playername = "";
 
         // Player Status
         level = 1;
@@ -71,7 +72,7 @@ public class Player extends Entity {
     }
 
     //gets and sets saved status
-    public void setSavedValue(){
+    public void setSavedValue() {
         entityWorldXPos = gamePanel.dataStorage.getXPos();
         entityWorldYPos = gamePanel.dataStorage.getYPos();
         entitySpeed = 4;

@@ -5,15 +5,14 @@ import Main.GamePanel;
 public class NPC_Emilia extends Entity {
     public NPC_Emilia(GamePanel gp, int x, int y) {
         super(gp);
-        entityWorldXPos = gp.finalTileSize*x;
-        entityWorldYPos = gp.finalTileSize*y;
+        entityWorldXPos = gp.finalTileSize * x;
+        entityWorldYPos = gp.finalTileSize * y;
         direction = "down";
         entitySpeed = 1;
         standbyFlag = true;
         getEntityImg();
         setDialogue();
     }
-
 
 
     @Override
@@ -34,7 +33,7 @@ public class NPC_Emilia extends Entity {
 
 
     public void setDialogue() {
-        dialogues[0] = "সুবারু! সুবারু!";
+        dialogues[0] = String.format("%s! %s!", gp.player.playername, gp.player.playername);
         dialogues[1] = "আলহামদুলিল্লাহ, তুমি এখানে আছো।";
         dialogues[2] = "দেখো গ্রামটা কাদামাটি দানবদের দখলে চলে গেছে।";
         dialogues[3] = "দয়া করে এই দানবদের পরাস্ত কর।";
@@ -42,6 +41,7 @@ public class NPC_Emilia extends Entity {
         dialogues[5] = "তার খামারের অবস্থা আরও ভয়াবহ।";
 
     }
+
     @Override
     public void update() {
         // NPC stays still - only update sprite animation for idle effect
@@ -53,6 +53,7 @@ public class NPC_Emilia extends Entity {
     }
 
     public void speak() {
+        setDialogue();
         super.speak();
     }
 }
