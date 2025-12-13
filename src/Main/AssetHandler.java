@@ -35,21 +35,25 @@ public class AssetHandler {
         gamePanel.monster[12] = new Monster_Slime(gamePanel, 63, 21);
         gamePanel.monster[13] = new Monster_Slime(gamePanel, 81, 23);
         gamePanel.monster[14] = new Monster_Slime(gamePanel, 72, 65);
-//        gamePanel.monster[15] = new Monster_Slime(gamePanel, 26, 30);
-//        gamePanel.monster[16] = new Monster_Slime(gamePanel, 25, 30);
-//        gamePanel.monster[17] = new Monster_Slime(gamePanel, 22, 30);
-//        gamePanel.monster[18] = new Monster_Slime(gamePanel, 26, 30);
-//        gamePanel.monster[19] = new Monster_Slime(gamePanel, 25, 30);
-//        gamePanel.monster[20] = new Monster_Slime(gamePanel, 22, 30);
-//        gamePanel.monster[21] = new Monster_Slime(gamePanel, 26, 30);
-//        gamePanel.monster[22] = new Monster_Slime(gamePanel, 25, 30);
-//        gamePanel.monster[23] = new Monster_Slime(gamePanel, 22, 30);
-//        gamePanel.monster[24] = new Monster_Slime(gamePanel, 26, 30);
+        gamePanel.monster[15] = new Monster_Slime(gamePanel, 30, 48);
+        gamePanel.monster[16] = new Monster_Slime(gamePanel, 31, 48);
+        gamePanel.monster[17] = new Monster_Slime(gamePanel, 32, 48);
+        gamePanel.monster[18] = new Monster_Slime(gamePanel, 33, 48);
+        gamePanel.monster[19] = new Monster_Slime(gamePanel, 34, 48);
+        gamePanel.monster[20] = new Monster_Slime(gamePanel, 35, 48);
+        gamePanel.monster[21] = new Monster_Slime(gamePanel, 36, 48);
+        gamePanel.monster[22] = new Monster_Slime(gamePanel, 37, 48);
+        gamePanel.monster[23] = new Monster_Slime(gamePanel, 38, 48);
+        gamePanel.monster[24] = new Monster_Slime(gamePanel, 39, 48);
 
 
         // betelgeuse
         gamePanel.monster[25] = new Betelgeuse(gamePanel, 80, 79);
 
 
+    }
+
+    public void respawnMonster(){
+        setMonster();
     }
 }

@@ -295,6 +295,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void restart() {
         player.setDefaultValue();
+        assetHandler.setMonster();
     }
 
 

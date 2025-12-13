@@ -94,15 +94,17 @@ public class UI {
 
         } else if (gp.gameState == gp.gameoverstate) {
             drawGameOverScrn();
-
+            // possible bug fix
+//            gp.assetHandler.respawnMonster();
+//            fixed inside key handler
         } else if (gp.gameState == gp.characterstate) {
             drawCharacterScrn();
             drawInventory();
 
         } else if (gp.gameState == gp.inputplayernamestate) {
             inputplayername();
-        } else {
-            // Playstate in here
+        } else if(gp.gameState == gp.playState){
+            // Play state in here
             drawPlayerLife();
             drawMessage();
             if (LEVELEDUP) {

@@ -33,7 +33,11 @@ public class KeyHandler implements KeyListener {
 
         // Title State
         if (gp.gameState == gp.titleState) {
-            handleTitlestate(asciiCode);
+            try {
+                handleTitlestate(asciiCode);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
         } else if (gp.gameState == gp.inputplayernamestate) {
             handleNameInputState(asciiCode);
         }
@@ -206,7 +210,7 @@ public class KeyHandler implements KeyListener {
         }
     }
 
-    private void handleTitlestate(int asciiCode) {
+    private void handleTitlestate(int asciiCode) throws InterruptedException {
 
         if (asciiCode == KeyEvent.VK_W || asciiCode == KeyEvent.VK_UP) {
             gp.playSE(1, volume);
@@ -223,10 +227,19 @@ public class KeyHandler implements KeyListener {
             gp.playSE(1, volume);
             if (gp.ui.commandNum == 0) {
                 // Enter New Game
-                gp.player.setDefaultValue();
+//                gp.assetHandler.respawnMonster();  // the monster fail to respawn bug fix
+//                gp.player.setDefaultValue();
+                gp.restart();
                 gp.gameState = gp.inputplayernamestate;
 
-            } else if (gp.ui.commandNum == 1) {
+            }
+            else if (gp.ui.commandNum == 1 && !gp.ui.gameDeleted){
+                // maybe a msg saying no game is saved in directory
+                gp.wait(3000);
+                gp.restart();
+                gp.gameState = gp.inputplayernamestate;
+            }
+            else if (gp.ui.commandNum == 1) {
                 // load game
                 gp.dataStorage.readData();
                 gp.dataStorage.applyToPlayer(gp.player);
