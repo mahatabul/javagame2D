@@ -23,6 +23,9 @@ public class TileManager {
     ArrayList<String> fileName = new ArrayList<>();
     ArrayList<String> collisionStatus = new ArrayList<>();
 
+    //area bound
+    public int[][] areaBounds = new int[4][4];
+
     public TileManager(GamePanel gp) {
         this.gamePanel = gp;
         
@@ -72,6 +75,9 @@ public class TileManager {
 
         loadMap(maps[0]);
         currentMapIdx = 0;
+
+        //setting area bounds
+        setAreaBounds();
     }
 
     public void getTileImage() {
@@ -191,6 +197,29 @@ public class TileManager {
         }
 
 
+    }
+
+    private void setAreaBounds(){
+        //farm
+        areaBounds[0][0] = 912;
+        areaBounds[0][1] = 1880;
+        areaBounds[0][2] = 1852;
+        areaBounds[0][3] = 2496;
+        //village
+        areaBounds[1][0] = 2352;
+        areaBounds[1][1] = 1284;
+        areaBounds[1][2] = 3940;
+        areaBounds[1][3] = 1712;
+        //boss arena
+        areaBounds[2][0] = 3340;
+        areaBounds[2][1] = 3152;
+        areaBounds[2][2] = 4148+48;
+        areaBounds[2][3] = 3920+48;
+        //forest
+//        areaBounds[3][0] =;
+//        areaBounds[3][1] =;
+//        areaBounds[3][2] =;
+//        areaBounds[3][3] =;
     }
 
 

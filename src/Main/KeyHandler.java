@@ -208,6 +208,26 @@ public class KeyHandler implements KeyListener {
         if (asciiCode == KeyEvent.VK_C) {
             gp.gameState = gp.characterstate;
         }
+//        System.out.printf("%d %d",gp.player.entityWorldXPos,gp.player.entityWorldYPos);
+        // for checking if player gets close to certain area range to print area names on screen
+
+        if (gp.player.entityWorldXPos >= gp.tileManager.areaBounds[0][0]
+                && gp.player.entityWorldXPos <= gp.tileManager.areaBounds[0][2]
+                && gp.player.entityWorldYPos >= gp.tileManager.areaBounds[0][1]
+                && gp.player.entityWorldYPos >= gp.tileManager.areaBounds[0][3]) {
+            gp.ui.drawAreaName("Farm");
+        } else if (gp.player.entityWorldXPos >= gp.tileManager.areaBounds[1][0]
+                && gp.player.entityWorldXPos <= gp.tileManager.areaBounds[1][2]
+                && gp.player.entityWorldYPos >= gp.tileManager.areaBounds[1][1]
+                && gp.player.entityWorldYPos >= gp.tileManager.areaBounds[1][3]) {
+            gp.ui.drawAreaName("Village");
+        } else if (gp.player.entityWorldXPos >= gp.tileManager.areaBounds[2][0]
+                && gp.player.entityWorldXPos <= gp.tileManager.areaBounds[2][2]
+                && gp.player.entityWorldYPos >= gp.tileManager.areaBounds[2][1]
+                && gp.player.entityWorldYPos >= gp.tileManager.areaBounds[2][3]) {
+            gp.ui.drawAreaName("Farm");
+        }
+
     }
 
     private void handleTitlestate(int asciiCode) throws InterruptedException {
