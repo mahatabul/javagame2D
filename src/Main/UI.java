@@ -175,6 +175,16 @@ public class UI {
 
     }
 
+    public void drawAreaName(String name){
+        int x =(int) (gp.finalTileSize*0.5), y = gp.finalTileSize * 9, width = (gp.finalTileSize * 4), height = (int)(gp.finalTileSize * 1.25);
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 26f));
+        x += (int) (gp.finalTileSize*0.85);
+        y += (int)(gp.finalTileSize*0.75);
+        g2.drawString(name, x, y);
+    }
+
     private void drawInventory() {
         final int frameX = gp.finalTileSize * 9, frameY = gp.finalTileSize, frameWidth = gp.finalTileSize * 6, frameHeight = gp.finalTileSize * 5;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
