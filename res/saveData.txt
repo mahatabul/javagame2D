@@ -1,1 +1,14 @@
+1
+gfhfrr
+/Mapping Data/forest.txt
+3124
+1728
+1
+1
+1
+1
+1
 0
+3
+0
+Wood Sword

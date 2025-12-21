@@ -126,6 +126,19 @@ public class UI {
         if (shownosavescrn) {
             showMsgonscrn("No Saved Game");
         }
+
+        showAreaName(gp.player.entityWorldXPos, gp.player.entityWorldYPos);
+
+    }
+
+    public void showAreaName(int x, int y) {
+        if (x >= gp.tileManager.areaBounds[0][0] && x <= gp.tileManager.areaBounds[0][2] && y >= gp.tileManager.areaBounds[0][1] && y >= gp.tileManager.areaBounds[0][3]) {
+            gp.ui.drawAreaName("Farm");
+        } else if (x >= gp.tileManager.areaBounds[1][0] && x <= gp.tileManager.areaBounds[1][2] && y >= gp.tileManager.areaBounds[1][1] && y >= gp.tileManager.areaBounds[1][3]) {
+            gp.ui.drawAreaName("Village");
+        } else if (x >= gp.tileManager.areaBounds[2][0] && x <= gp.tileManager.areaBounds[2][2] && y >= gp.tileManager.areaBounds[2][1] && y >= gp.tileManager.areaBounds[2][3]) {
+            gp.ui.drawAreaName("Farm");
+        }
     }
 
     public void showsavemsg() {
@@ -171,14 +184,12 @@ public class UI {
     }
 
 
-
     private void showMsgonscrn(String s) {
         int x = (int) (gp.finalTileSize * 0.5), y = gp.finalTileSize * 9;
         g2.setFont(Jersey.deriveFont(Font.PLAIN, 26f));
         g2.setColor(Color.WHITE);
         g2.drawString(s, x, y);
     }
-
 
 
     private void drawMessage() {
@@ -204,13 +215,10 @@ public class UI {
 
     }
 
-    public void drawAreaName(String name) {
-        int x = (int) (gp.finalTileSize * 0.5), y = gp.finalTileSize * 9, width = (gp.finalTileSize * 4), height = (int) (gp.finalTileSize * 1.25);
-        drawSubWindow(x, y, width, height);
-
-        g2.setFont(Jersey.deriveFont(Font.PLAIN, 26f));
-        x += (int) (gp.finalTileSize * 0.85);
-        y += (int) (gp.finalTileSize * 0.75);
+    private void drawAreaName(String name) {
+        int x = (int) (gp.finalTileSize * 0.5), y = gp.finalTileSize * 11;
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 30f));
+        g2.setColor(Color.WHITE);
         g2.drawString(name, x, y);
     }
 
