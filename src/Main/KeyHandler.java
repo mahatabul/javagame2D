@@ -2,6 +2,9 @@ package Main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 
 public class KeyHandler implements KeyListener {
 
@@ -176,8 +179,10 @@ public class KeyHandler implements KeyListener {
                 gp.ui.commandNum = 0; // reset when entering play
             } else if (gp.ui.commandNum == 1) {
                 // save game
+                gp.ui.showsavemsg();
                 gp.dataStorage.saveData();
                 gp.ui.gamesaved = true;
+                gp.ui.gameDeleted = false;
             } else if (gp.ui.commandNum == 2) {
                 // Options
                 gp.previousState = gp.gameState;
@@ -253,23 +258,42 @@ public class KeyHandler implements KeyListener {
                 gp.gameState = gp.inputplayernamestate;
 
             }
-            else if (gp.ui.commandNum == 1 && !gp.ui.gameDeleted){
-                // maybe a msg saying no game is saved in directory
-                gp.wait(3000);
-                gp.restart();
-                gp.gameState = gp.inputplayernamestate;
-            }
             else if (gp.ui.commandNum == 1) {
-                // load game
-                gp.dataStorage.readData();
-                gp.dataStorage.applyToPlayer(gp.player);
-                gp.gameState = gp.playState;
 
+                // Load game - check save file directly
+                File saveFile = new File("res/saveData.txt");
+                gp.ui.gameDeleted = false;
+                // Load game
+                if (saveFile.exists()) {
+                    try {
+                        BufferedReader br = new BufferedReader(new FileReader(saveFile));
+                        String firstLine = br.readLine();
+                        br.close();
 
+                        // Check if first line is "1" (valid save)
+                        if (firstLine != null && firstLine.trim().equals("0")) {
+                            gp.ui.gameDeleted = true;
+                        }
+                    } catch (Exception e) {
+                        gp.ui.gameDeleted = false;
+                    }
+                }
+
+                if (!gp.ui.gameDeleted) {
+                    // Load the saved game
+                    gp.dataStorage.readData();
+                    gp.dataStorage.applyToPlayer(gp.player);
+                    gp.gameState = gp.playState;
+                } else {
+                    // No valid save - show message
+                    gp.ui.shownosavemsg();
+                }
             } else if (gp.ui.commandNum == 2) {
                 // delete save data
+                gp.ui.showdeletemsg();
                 gp.dataStorage.deleteData();
                 gp.ui.gameDeleted = true;
+                gp.ui.gamesaved = false;
                 // we can give a popup confirmation or not here
             } else if (gp.ui.commandNum == 3) {
                 // options
@@ -278,7 +302,7 @@ public class KeyHandler implements KeyListener {
                 gp.ui.commandNum = 0; // reset when entering play
 
             } else {
-                gp.dataStorage.saveData();
+//                gp.dataStorage.saveData();
                 System.exit(0);
             }
         }

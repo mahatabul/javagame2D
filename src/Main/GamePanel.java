@@ -247,7 +247,7 @@ public class GamePanel extends JPanel implements Runnable {
         music.setVolume(ui.musicVolume);
         tempScreen = new BufferedImage(scrnWidth2, scrnHeight2, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D) tempScreen.getGraphics();
-        setFullscreen();
+//        setFullscreen();
     }
 
     public void setFullscreen() {

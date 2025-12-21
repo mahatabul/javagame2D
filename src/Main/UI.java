@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class UI {
@@ -20,10 +22,13 @@ public class UI {
     public String[] optionsItems = {"Volume", "SE", "Controls", "Back"};
     public int levelUpmsgCntr = 0;
     public boolean LEVELEDUP = false;
-    public int gameSavedCntr = 0;
+
     public boolean gamesaved = false;
-    public int gameDeletedCntr = 0;
     public boolean gameDeleted = false;
+    public boolean showgamesavescrn = false;
+    public boolean showgamedeletedscrn = false;
+    public boolean shownosavescrn = false;
+
     // current volume level (0.0 → 1.0)
     public float musicVolume = 0.1F;
     public boolean seEnabled = true;
@@ -34,7 +39,7 @@ public class UI {
     // messages
     ArrayList<String> message = new ArrayList<>();
     ArrayList<Integer> msgCounter = new ArrayList<>();
-    int blinkCounter = 0;
+    private Timer msgTimer;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -103,7 +108,7 @@ public class UI {
 
         } else if (gp.gameState == gp.inputplayernamestate) {
             inputplayername();
-        } else if(gp.gameState == gp.playState){
+        } else if (gp.gameState == gp.playState) {
             // Play state in here
             drawPlayerLife();
             drawMessage();
@@ -112,45 +117,69 @@ public class UI {
             }
 
         }
-        if (gamesaved && gameSavedCntr < 100) {
-            gameSavedCntr++;
-            drawgameSavescrn();
-            if (gameSavedCntr == 100) {
-                gamesaved = false;
-                gameSavedCntr = 0;
-            }
+        if (showgamesavescrn) {
+            showMsgonscrn("Game Saved");
         }
-        if (gameDeleted && gameDeletedCntr < 100) {
-            gameDeletedCntr++;
-            drawgamedeletescrn();
-            if (gameDeletedCntr == 100) {
-                gameDeleted = false;
-                gameDeletedCntr = 0;
-            }
+        if (showgamedeletedscrn) {
+            showMsgonscrn("Game Deleted");
+        }
+        if (shownosavescrn) {
+            showMsgonscrn("No Saved Game");
         }
     }
 
-    private void drawgameSavescrn() {
-        // Window
-        int x =(int) (gp.finalTileSize*0.5), y = gp.finalTileSize * 9, width = (gp.finalTileSize * 4), height = (int)(gp.finalTileSize * 1.25);
-        drawSubWindow(x, y, width, height);
+    public void showsavemsg() {
+        showgamesavescrn = true;
+        if (msgTimer != null) {
+            msgTimer.cancel();
+        }
+        msgTimer = new Timer();
+        msgTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                showgamesavescrn = false;
+            }
+        }, 2000);
+    }
 
+    public void showdeletemsg() {
+        showgamedeletedscrn = true;
+        if (msgTimer != null) {
+            msgTimer.cancel();
+        }
+        msgTimer = new Timer();
+        msgTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                showgamedeletedscrn = false;
+            }
+        }, 2000);
+    }
+
+    public void shownosavemsg() {
+        shownosavescrn = true;
+        if (msgTimer != null) {
+            msgTimer.cancel();
+        }
+        msgTimer = new Timer();
+        msgTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                shownosavescrn = false;
+            }
+        }, 2000);
+    }
+
+
+
+    private void showMsgonscrn(String s) {
+        int x = (int) (gp.finalTileSize * 0.5), y = gp.finalTileSize * 9;
         g2.setFont(Jersey.deriveFont(Font.PLAIN, 26f));
-        x += (int) (gp.finalTileSize*0.85);
-        y += (int)(gp.finalTileSize*0.75);
-        g2.drawString("Game Saved", x, y);
+        g2.setColor(Color.WHITE);
+        g2.drawString(s, x, y);
     }
 
-    private void drawgamedeletescrn() {
-        // Window
-        int x = gp.finalTileSize, y = gp.finalTileSize * 8, width = (gp.finalTileSize * 5), height = gp.finalTileSize * 2;
-        drawSubWindow(x, y, width, height);
 
-        g2.setFont(Jersey.deriveFont(Font.PLAIN, 32f));
-        x += gp.finalTileSize;
-        y += gp.finalTileSize;
-        g2.drawString("Game Deleted", x, y);
-    }
 
     private void drawMessage() {
         int msgX = gp.finalTileSize;
@@ -175,13 +204,13 @@ public class UI {
 
     }
 
-    public void drawAreaName(String name){
-        int x =(int) (gp.finalTileSize*0.5), y = gp.finalTileSize * 9, width = (gp.finalTileSize * 4), height = (int)(gp.finalTileSize * 1.25);
+    public void drawAreaName(String name) {
+        int x = (int) (gp.finalTileSize * 0.5), y = gp.finalTileSize * 9, width = (gp.finalTileSize * 4), height = (int) (gp.finalTileSize * 1.25);
         drawSubWindow(x, y, width, height);
 
         g2.setFont(Jersey.deriveFont(Font.PLAIN, 26f));
-        x += (int) (gp.finalTileSize*0.85);
-        y += (int)(gp.finalTileSize*0.75);
+        x += (int) (gp.finalTileSize * 0.85);
+        y += (int) (gp.finalTileSize * 0.75);
         g2.drawString(name, x, y);
     }
 
@@ -234,8 +263,6 @@ public class UI {
         textY += lineheight;
         g2.drawString("Strength", textX, textY);
         textY += lineheight;
-//        g2.drawString("Dexterity", textX, textY);   // unnecessary
-//        textY += lineheight;
         g2.drawString("Attack", textX, textY);
         textY += lineheight;
         g2.drawString("Defense", textX, textY);
@@ -247,9 +274,7 @@ public class UI {
         g2.drawString("Coin", textX, textY);
         textY += lineheight + 15;
         g2.drawString("Weapon", textX, textY);
-        textY += (int) (lineheight * 1.5);
-//        g2.drawString("Shield", textX, textY);    // wont use shield anyways
-//        textY += lineheight;
+
 
         // Values
         int tailX = (frameX + frameWidth) - 30;
