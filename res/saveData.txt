@@ -1,8 +1,8 @@
 1
 dsdskdls
 /Mapping Data/forest.txt
-1064
-1500
+932
+2420
 1
 6
 1

@@ -41,6 +41,8 @@ public class KeyHandler implements KeyListener {
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
+        } else if (gp.gameState == gp.startingcreditState) {
+            handleCreditState(asciiCode);
         } else if (gp.gameState == gp.inputplayernamestate) {
             handleNameInputState(asciiCode);
         }
@@ -201,6 +203,13 @@ public class KeyHandler implements KeyListener {
         }
     }
 
+    private void handleCreditState(int asciiCode) {
+        if (asciiCode == KeyEvent.VK_ENTER || asciiCode == KeyEvent.VK_ESCAPE) {
+            gp.playSE(1, volume);
+            gp.gameState = gp.titleState;  // Go to title screen
+        }
+    }
+
     private void handlePlaystate(int asciiCode) {
         if (asciiCode == KeyEvent.VK_W || asciiCode == KeyEvent.VK_UP) upPressed = true;
         if (asciiCode == KeyEvent.VK_S || asciiCode == KeyEvent.VK_DOWN) downPressed = true;
@@ -211,10 +220,6 @@ public class KeyHandler implements KeyListener {
         if (asciiCode == KeyEvent.VK_C) {
             gp.gameState = gp.characterstate;
         }
-//        System.out.printf("%d %d",gp.player.entityWorldXPos,gp.player.entityWorldYPos);
-        // for checking if player gets close to certain area range to print area names on screen
-
-
 
     }
 
@@ -240,8 +245,7 @@ public class KeyHandler implements KeyListener {
                 gp.restart();
                 gp.gameState = gp.inputplayernamestate;
 
-            }
-            else if (gp.ui.commandNum == 1) {
+            } else if (gp.ui.commandNum == 1) {
 
                 // Load game - check save file directly
                 File saveFile = new File("res/saveData.txt");

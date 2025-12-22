@@ -12,6 +12,7 @@ import java.util.TimerTask;
 
 
 public class UI {
+    private final int creditDuration = 400;
     public float titleFontsize = 80, otherFontsize = 35, dlgFontsize = 26;
     public int commandNum = 0;
     public boolean showControlsWindow = false;
@@ -22,13 +23,11 @@ public class UI {
     public String[] optionsItems = {"Volume", "SE", "Controls", "Back"};
     public int levelUpmsgCntr = 0;
     public boolean LEVELEDUP = false;
-
     public boolean gamesaved = false;
     public boolean gameDeleted = false;
     public boolean showgamesavescrn = false;
     public boolean showgamedeletedscrn = false;
     public boolean shownosavescrn = false;
-
     // current volume level (0.0 → 1.0)
     public float musicVolume = 0.1F;
     public boolean seEnabled = true;
@@ -40,6 +39,8 @@ public class UI {
     ArrayList<String> message = new ArrayList<>();
     ArrayList<Integer> msgCounter = new ArrayList<>();
     private Timer msgTimer;
+    // credit scene
+    private int creditTimer = 0;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -82,7 +83,9 @@ public class UI {
         this.g2 = g2;
         g2.setFont(Jersey);
         g2.setColor(Color.white);
-        if (gp.gameState == gp.pauseState) {
+        if (gp.gameState == gp.startingcreditState) {
+            drawCreditScreen();
+        } else if (gp.gameState == gp.pauseState) {
             drawPlayerLife();
             drawPauseScrn();
         } else if (gp.gameState == gp.titleState) {
@@ -129,6 +132,60 @@ public class UI {
 
         showAreaName(gp.player.entityWorldXPos, gp.player.entityWorldYPos);
 
+    }
+
+    public void drawCreditScreen() {
+        // Black background
+        g2.setColor(new Color(0, 0, 0));
+        g2.fillRect(0, 0, gp.scrWidth, gp.scrHeight);
+
+        // Title fade in (frames 0-60)
+        int titleAlpha = Math.min(255, creditTimer * 4);
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 60f));
+        g2.setColor(new Color(255, 255, 255, titleAlpha));
+        String text = "RE:ZERO RPG";
+        int x = centerXfortext(text);
+        int y = gp.finalTileSize * 3;
+        g2.drawString(text, x, y);
+
+        // Credits fade in (starts at frame 100, fades over 60 frames)
+        if (creditTimer > 100) {
+            int creditsAlpha = Math.min(255, (creditTimer - 100) * 4);
+            g2.setFont(Jersey.deriveFont(Font.PLAIN, 32f));
+            g2.setColor(new Color(255, 255, 255, creditsAlpha));
+
+            text = "Developed by: Raj & Mahatabul";
+            x = centerXfortext(text);
+            y += gp.finalTileSize * 2;
+            g2.drawString(text, x, y);
+
+            text = "Art & Design: Raj";
+            x = centerXfortext(text);
+            y += gp.finalTileSize;
+            g2.drawString(text, x, y);
+
+            text = "Story: Raj & Mahatabul";
+            x = centerXfortext(text);
+            y += gp.finalTileSize;
+            g2.drawString(text, x, y);
+        }
+
+        // Skip instruction fade in (starts at frame 180, fades over 60 frames)
+        if (creditTimer > 180) {
+            int skipAlpha = Math.min(255, (creditTimer - 180) * 4);
+            g2.setFont(bangla.deriveFont(Font.PLAIN, 24f));
+            g2.setColor(new Color(255, 255, 255, skipAlpha));
+            text = "Press ENTER to continue";
+            x = centerXfortext(text);
+            y = gp.scrHeight - gp.finalTileSize * 2;
+            g2.drawString(text, x, y);
+        }
+
+        creditTimer++;
+        if (creditTimer>=creditDuration){
+            gp.gameState=gp.titleState;
+            creditTimer=0;
+        }
     }
 
     public void showAreaName(int x, int y) {

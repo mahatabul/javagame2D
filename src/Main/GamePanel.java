@@ -80,6 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
     // Game State
 
     public int gameState;
+    public final int startingcreditState = 9;
     public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
@@ -242,12 +243,12 @@ public class GamePanel extends JPanel implements Runnable {
         config.loadConfig();
         assetHandler.setNPC();
         assetHandler.setMonster();
-        gameState = titleState;
+        gameState = startingcreditState;
         playMusic(0);
         music.setVolume(ui.musicVolume);
         tempScreen = new BufferedImage(scrnWidth2, scrnHeight2, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D) tempScreen.getGraphics();
-//        setFullscreen();
+        setFullscreen();
     }
 
     public void setFullscreen() {
