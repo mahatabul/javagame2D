@@ -201,20 +201,20 @@ public class TileManager {
 
     private void setAreaBounds(){
         //farm
-        areaBounds[0][0] = 912;
-        areaBounds[0][1] = 1880;
-        areaBounds[0][2] = 1852;
-        areaBounds[0][3] = 2496;
+        areaBounds[0][0] = 16*48;
+        areaBounds[0][1] = 38*48;
+        areaBounds[0][2] = 38*48;
+        areaBounds[0][3] = 51*48;
         //village
-        areaBounds[1][0] = 2352;
-        areaBounds[1][1] = 1284;
-        areaBounds[1][2] = 3940;
-        areaBounds[1][3] = 1712;
+        areaBounds[1][0] = 48*48;
+        areaBounds[1][1] = 20*48;
+        areaBounds[1][2] = 81*48;
+        areaBounds[1][3] = 39*48;
         //boss arena
-        areaBounds[2][0] = 3340;
-        areaBounds[2][1] = 3152;
-        areaBounds[2][2] = 4148+48;
-        areaBounds[2][3] = 3920+48;
+        areaBounds[2][0] = 65*48;
+        areaBounds[2][1] = 60*48;
+        areaBounds[2][2] = 91*48;
+        areaBounds[2][3] = 85*48;
         //forest
 //        areaBounds[3][0] =;
 //        areaBounds[3][1] =;

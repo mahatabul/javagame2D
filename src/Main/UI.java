@@ -408,12 +408,15 @@ public class UI {
     }
 
     public void showAreaName(int x, int y) {
-        if (x >= gp.tileManager.areaBounds[0][0] && x <= gp.tileManager.areaBounds[0][2] && y >= gp.tileManager.areaBounds[0][1] && y >= gp.tileManager.areaBounds[0][3]) {
+        if (x >= gp.tileManager.areaBounds[0][0] && x <= gp.tileManager.areaBounds[0][2]
+                && y >= gp.tileManager.areaBounds[0][1] && y <= gp.tileManager.areaBounds[0][3]) {
             gp.ui.drawAreaName("Farm");
-        } else if (x >= gp.tileManager.areaBounds[1][0] && x <= gp.tileManager.areaBounds[1][2] && y >= gp.tileManager.areaBounds[1][1] && y >= gp.tileManager.areaBounds[1][3]) {
+        } else if (x >= gp.tileManager.areaBounds[1][0] && x <= gp.tileManager.areaBounds[1][2]
+                && y >= gp.tileManager.areaBounds[1][1] && y <= gp.tileManager.areaBounds[1][3]) {
             gp.ui.drawAreaName("Village");
-        } else if (x >= gp.tileManager.areaBounds[2][0] && x <= gp.tileManager.areaBounds[2][2] && y >= gp.tileManager.areaBounds[2][1] && y >= gp.tileManager.areaBounds[2][3]) {
-            gp.ui.drawAreaName("Farm");
+        } else if (x >= gp.tileManager.areaBounds[2][0] && x <= gp.tileManager.areaBounds[2][2]
+                && y >= gp.tileManager.areaBounds[2][1] && y <= gp.tileManager.areaBounds[2][3]) {
+            gp.ui.drawAreaName("Boss Arena");
         }
     }
 
