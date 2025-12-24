@@ -1,13 +1,13 @@
 1
-dsdskdls
+d
 /Mapping Data/forest.txt
-932
-2420
+2620
+3168
 1
 6
-1
-1
-1
+10
+10
+10
 0
 3
 0

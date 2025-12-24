@@ -4,93 +4,75 @@ import Entity.Entity;
 import Entity.Player;
 import Tile.TileManager;
 
-
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    final int originalTileSize = 16; // 16*16 tile size                             //
-    final int scaling = 3;           // changeable scaling depending on screen size //
-
-    public final int finalTileSize = originalTileSize * scaling; // tile size after scaling  //
     public final int maxScreenColumn = 16;                     // number of tile column  16  //
     public final int maxScreenRow = 12;                        // number of tile rows   12   //
-
-    public final int scrWidth = finalTileSize * maxScreenColumn; // final screen width       //
-    public final int scrHeight = finalTileSize * maxScreenRow;   // final screen height      //
-
-    // World Settings
-    public int maxWorldCol = 100;
-    public int maxWorldRow = 100;
-    public final int worldTotalWidth = finalTileSize * maxWorldCol;
-    public final int worldTotalHeight = finalTileSize * maxWorldRow;
-
-    // for full screen
-    int scrnWidth2 = scrWidth;
-    int scrnHeight2 = scrHeight;
-    BufferedImage tempScreen;
-    public Graphics2D g2;
-
-    // Sound and Effects
-    public Sound music = new Sound();
-    public Sound se = new Sound();
-
-    // Config
-
-    Config config = new Config(this);
-
-    // just a flag
-    boolean flag = true;
-
-
-    // Save-Load related
-    public DataStore dataStorage = new DataStore(this);
-
-
-    // fps //
-    int FPS = 60;
-
-    public TileManager tileManager = new TileManager(this);
-    public KeyHandler kh = new KeyHandler(this);
-    Thread gameThread;
-
-    public CollisionChecker collisionChecker = new CollisionChecker(this);
-    public AssetHandler assetHandler = new AssetHandler(this);
-
-
-    // pulled ui before player to fix null pointer error for dataStore
-    public UI ui = new UI(this);
-    public Player player = new Player(this, this.kh);
-    public Entity[] staticObjects = new Entity[10];
-    public Entity[] npc = new Entity[10];
-    public Entity[] monster = new Entity[30];
-    ArrayList<Entity> entityList = new ArrayList<>();
-    public ArrayList<Entity> projectileList = new ArrayList<>();
-
-    // Event Handler
-    public EventHandler eventHandler = new EventHandler(this);
-
-    // Game State
-
-    public int gameState;
+    public final int endingCreditState = 10;
     public final int startingcreditState = 9;
     public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int optionState = 3;
     public final int dialogueState = 4;
-    public int previousState = 0;
     public final int gameoverstate = 5;
     public final int characterstate = 6;
     public final int inputplayernamestate = 7;
     public final int gameWinstate = 8;
+    final int originalTileSize = 16; // 16*16 tile size                             //
+    final int scaling = 3;           // changeable scaling depending on screen size //
+    public final int finalTileSize = originalTileSize * scaling; // tile size after scaling  //
+    public final int scrWidth = finalTileSize * maxScreenColumn; // final screen width       //
+
+    // Config
+    // for full screen
+    int scrnWidth2 = scrWidth;
+    public final int scrHeight = finalTileSize * maxScreenRow;   // final screen height      //
+    int scrnHeight2 = scrHeight;
+    // World Settings
+    public int maxWorldCol = 100;
+    public final int worldTotalWidth = finalTileSize * maxWorldCol;
+    public int maxWorldRow = 100;
+    public final int worldTotalHeight = finalTileSize * maxWorldRow;
+    public Graphics2D g2;
+    // Sound and Effects
+    public Sound music = new Sound();
+    public Sound se = new Sound();
+    // Save-Load related
+    public DataStore dataStorage = new DataStore(this);
+    public TileManager tileManager = new TileManager(this);
+    public KeyHandler kh = new KeyHandler(this);
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
+    public AssetHandler assetHandler = new AssetHandler(this);
+    // pulled ui before player to fix null pointer error for dataStore
+    public UI ui = new UI(this);
+    public Player player = new Player(this, this.kh);
+    public Entity[] staticObjects = new Entity[10];
+
+    // Game State
+    public Entity[] npc = new Entity[10];
+    public Entity[] monster = new Entity[30];
+    public Entity boss = monster[25];
+    public ArrayList<Entity> projectileList = new ArrayList<>();
+    // Event Handler
+    public EventHandler eventHandler = new EventHandler(this);
+    public int gameState;
+    public int previousState = 0;
+    BufferedImage tempScreen;
+    Config config = new Config(this);
+    // just a flag
+    boolean flag = true;
+    // fps //
+    int FPS = 60;
+    Thread gameThread;
+    ArrayList<Entity> entityList = new ArrayList<>();
 
 
     public GamePanel() {    // constructor              //
@@ -149,18 +131,24 @@ public class GamePanel extends JPanel implements Runnable {
                     npc[i].update();
                 }
             }
+
             // monster
             for (int i = 0; i < monster.length; i++) {
                 if (monster[i] != null) {
                     if (monster[i].alive && !monster[i].dying) {
                         monster[i].update();
                     }
-                    if (!monster[i].alive) {
+                    // triggers game win state
+                    if (!monster[25].alive) {
+                        gameState = gameWinstate;monster[i] = null;
+                        break;
+                    }
+
+                    if (!monster[i].alive && i != 25) {
                         monster[i] = null;
                     }
-//                    if(Objects.equals(monster[i].name, "Betelgeuse")){
-//
-//                    }
+
+
                 }
             }
             // projectile

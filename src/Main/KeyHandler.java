@@ -41,6 +41,10 @@ public class KeyHandler implements KeyListener {
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
+        } else if (gp.gameState == gp.gameWinstate) {
+            handlegameWin(asciiCode);
+        } else if (gp.gameState == gp.endingCreditState) {
+            handleEndingCreditState(asciiCode);
         } else if (gp.gameState == gp.startingcreditState) {
             handleCreditState(asciiCode);
         } else if (gp.gameState == gp.inputplayernamestate) {
@@ -207,6 +211,23 @@ public class KeyHandler implements KeyListener {
         if (asciiCode == KeyEvent.VK_ENTER || asciiCode == KeyEvent.VK_ESCAPE) {
             gp.playSE(1, volume);
             gp.gameState = gp.titleState;  // Go to title screen
+        }
+    }
+
+    private void handleEndingCreditState(int asciiCode) {
+        if (asciiCode == KeyEvent.VK_ENTER || asciiCode == KeyEvent.VK_ESCAPE) {
+            gp.playSE(1, volume);
+            gp.gameState = gp.titleState;
+            gp.ui.endingScrollY = gp.scrHeight; // Reset scroll position
+            gp.ui.endingCreditTimer = 0;
+        }
+    }
+
+    private void handlegameWin(int asciiCode) {
+        if (asciiCode == KeyEvent.VK_ENTER) {
+            gp.playSE(1, volume);
+            gp.gameState = gp.endingCreditState;
+
         }
     }
 

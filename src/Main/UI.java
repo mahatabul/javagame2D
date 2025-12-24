@@ -39,8 +39,12 @@ public class UI {
     ArrayList<String> message = new ArrayList<>();
     ArrayList<Integer> msgCounter = new ArrayList<>();
     private Timer msgTimer;
+
+
     // credit scene
-    private int creditTimer = 0;
+    public int creditTimer = 0;
+    int endingCreditTimer = 0;
+    int endingScrollY = -1;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -85,6 +89,8 @@ public class UI {
         g2.setColor(Color.white);
         if (gp.gameState == gp.startingcreditState) {
             drawCreditScreen();
+        } else if (gp.gameState == gp.endingCreditState) {
+            drawEndingCreditScreen();
         } else if (gp.gameState == gp.pauseState) {
             drawPlayerLife();
             drawPauseScrn();
@@ -120,6 +126,9 @@ public class UI {
             }
 
         }
+        else if (gp.gameState==gp.gameWinstate){
+            drawGameWinScreen();
+        }
         if (showgamesavescrn) {
             showMsgonscrn("Game Saved");
         }
@@ -134,7 +143,35 @@ public class UI {
 
     }
 
+    public void drawGameWinScreen() {
+
+        // Dark overlay
+        g2.setColor(new Color(0, 0, 0, 180));
+        g2.fillRect(0, 0, gp.scrWidth, gp.scrHeight);
+
+        // Title
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 64f));
+        String text = "YOU WON!";
+        int x = centerXfortext(text);
+        int y = gp.scrHeight / 2 - 40;
+
+        g2.setColor(Color.YELLOW);
+        g2.drawString(text, x, y);
+
+        // Subtitle
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24f));
+        text = "Press ENTER to continue";
+        x = centerXfortext(text);
+        y += 60;
+
+        g2.setColor(Color.WHITE);
+        g2.drawString(text, x, y);
+    }
+
     public void drawCreditScreen() {
+        if (endingScrollY == -1) {
+            endingScrollY = gp.scrHeight;
+        }
         // Black background
         g2.setColor(new Color(0, 0, 0));
         g2.fillRect(0, 0, gp.scrWidth, gp.scrHeight);
@@ -156,18 +193,9 @@ public class UI {
 
             text = "Developed by: Raj & Mahatabul";
             x = centerXfortext(text);
-            y += gp.finalTileSize * 2;
+            y += gp.finalTileSize * 4;
             g2.drawString(text, x, y);
 
-            text = "Art & Design: Raj";
-            x = centerXfortext(text);
-            y += gp.finalTileSize;
-            g2.drawString(text, x, y);
-
-            text = "Story: Raj & Mahatabul";
-            x = centerXfortext(text);
-            y += gp.finalTileSize;
-            g2.drawString(text, x, y);
         }
 
         // Skip instruction fade in (starts at frame 180, fades over 60 frames)
@@ -182,9 +210,200 @@ public class UI {
         }
 
         creditTimer++;
-        if (creditTimer>=creditDuration){
-            gp.gameState=gp.titleState;
-            creditTimer=0;
+        if (creditTimer >= creditDuration) {
+            gp.gameState = gp.titleState;
+            creditTimer = 0;
+        }
+    }
+
+    public void drawEndingCreditScreen() {
+        // Black background
+        g2.setColor(new Color(0, 0, 0));
+        g2.fillRect(0, 0, gp.scrWidth, gp.scrHeight);
+
+        // Calculate scroll position
+        int baseY = endingScrollY;
+        int spacing = gp.finalTileSize;
+
+        // Set up for centered text
+        g2.setColor(Color.WHITE);
+
+        // === MAIN TITLE ===
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 70f));
+        String text = "RE:ZERO RPG";
+        int x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        // === SUBTITLE ===
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 40f));
+        text = "Starting Life in Another World";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 3;
+
+        // === DEVELOPMENT TEAM ===
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 45f));
+        text = "DEVELOPMENT TEAM";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 32f));
+
+        text = "Game Director: Raj";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Lead Programmer: Mahatabul";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Co-Programmer: Raj";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        // === ART & DESIGN ===
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 45f));
+        text = "ART & DESIGN";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 32f));
+
+        text = "Character Design: Raj";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Sprite Artist: Raj";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Environment Artist: Raj";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "UI/UX Design: Mahatabul";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        // === STORY & WRITING ===
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 45f));
+        text = "STORY & WRITING";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 32f));
+
+        text = "Story by: Raj & Mahatabul";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Dialogue Writer: Raj";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Quest Design: Mahatabul";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        // === AUDIO ===
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 45f));
+        text = "AUDIO";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 32f));
+
+        text = "Music Composer: [Artist Name]";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Sound Effects: [Artist Name]";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Audio Engineer: [Name]";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        // === SPECIAL THANKS ===
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 45f));
+        text = "SPECIAL THANKS";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 32f));
+
+        text = "Original Story: Tappei Nagatsuki";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Re:Zero Franchise";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "Our Families & Friends";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing;
+
+        text = "And You, the Player!";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 3;
+
+        // === FINAL MESSAGE ===
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 50f));
+        text = "THANK YOU FOR PLAYING!";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 2;
+
+        g2.setFont(Jersey.deriveFont(Font.PLAIN, 28f));
+        text = "© 2025 Raj & Mahatabul";
+        x = centerXfortext(text);
+        g2.drawString(text, x, baseY);
+        baseY += spacing * 4;
+
+        // === SKIP INSTRUCTION ===
+        if (endingCreditTimer > 60) {
+            int skipAlpha = Math.min(200, (endingCreditTimer - 60) * 3);
+            g2.setColor(new Color(255, 255, 255, skipAlpha));
+            g2.setFont(bangla.deriveFont(Font.PLAIN, 24f));
+            text = "Press ENTER to skip";
+            x = centerXfortext(text);
+            g2.drawString(text, x, gp.scrHeight - gp.finalTileSize);
+        }
+
+        // Scroll up slowly
+        endingScrollY -= 1; // Adjust speed: lower = slower, higher = faster
+        endingCreditTimer++;
+
+        // Auto-return to title after credits finish
+        if (endingScrollY + baseY < -gp.finalTileSize) {
+            gp.gameState = gp.titleState;
+            endingScrollY = gp.scrHeight;
+            endingCreditTimer = 0;
         }
     }
 

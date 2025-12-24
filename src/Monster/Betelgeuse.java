@@ -10,14 +10,13 @@ public class Betelgeuse extends Entity {
     public Betelgeuse(GamePanel gp, double x, double y){
         super(gp);
         name = "Betelgeuse";
-        entitySpeed = 3;
-        maxLife = 100;
+        entitySpeed = 2;
+        maxLife = 50;
         life = maxLife;
         type = 2;
         attack = 10;
         defense = 3;
         exp = 100;
-
         spawnX = x;
         spawnY = y;
 
@@ -50,7 +49,6 @@ public class Betelgeuse extends Entity {
     private void getAttackImage() {
 
     }
-
 
     @Override
     public void getEntityImg(){
