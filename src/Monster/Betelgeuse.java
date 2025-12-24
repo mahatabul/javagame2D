@@ -11,7 +11,7 @@ public class Betelgeuse extends Entity {
         super(gp);
         name = "Betelgeuse";
         entitySpeed = 2;
-        maxLife = 50;
+        maxLife = 100;
         life = maxLife;
         type = 2;
         attack = 10;

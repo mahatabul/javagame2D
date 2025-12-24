@@ -192,6 +192,7 @@ public class Player extends Entity {
         // triggers game over state
         if (life <= 0) {
             gp.gameState = gp.gameoverstate;
+            gp.gameFinished = true;
             gp.playSE(6, 1f);
         }
 

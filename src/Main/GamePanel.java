@@ -80,6 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
     // Game State
 
     public int gameState;
+    public final int endingCreditState = 10;
     public final int startingcreditState = 9;
     public final int titleState = 0;
     public final int playState = 1;
@@ -91,6 +92,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int characterstate = 6;
     public final int inputplayernamestate = 7;
     public final int gameWinstate = 8;
+
+    public boolean gameFinished = false;
 
 
     public GamePanel() {    // constructor              //
@@ -155,12 +158,13 @@ public class GamePanel extends JPanel implements Runnable {
                     if (monster[i].alive && !monster[i].dying) {
                         monster[i].update();
                     }
-                    if (!monster[i].alive) {
+                    if (!monster[25].alive){
+                        gameState = gameWinstate;gameFinished=true;
+                        break;
+                    }
+                    if (!monster[i].alive && i!=25) {
                         monster[i] = null;
                     }
-//                    if(Objects.equals(monster[i].name, "Betelgeuse")){
-//
-//                    }
                 }
             }
             // projectile

@@ -139,7 +139,10 @@ public class UI {
             showMsgonscrn("No Saved Game");
         }
 
-        showAreaName(gp.player.entityWorldXPos, gp.player.entityWorldYPos);
+        if (!gp.gameFinished){
+
+            showAreaName(gp.player.entityWorldXPos, gp.player.entityWorldYPos);
+        }
 
     }
 
