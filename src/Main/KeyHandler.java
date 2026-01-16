@@ -22,11 +22,11 @@ public class KeyHandler implements KeyListener {
             char c = e.getKeyChar();
 
             // Allow letters, numbers, and spaces
-            if (Character.isLetterOrDigit(c) || c == ' ') {
+//            if (Character.isLetterOrDigit(c) || c == ' ') {
                 if (gp.player.playername.length() < 10) { // Max 15 characters
                     gp.player.playername += c;
                 }
-            }
+//            }
         }
     }
 

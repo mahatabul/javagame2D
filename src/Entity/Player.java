@@ -106,7 +106,7 @@ public class Player extends Entity {
     }
 
     public int getAttack() {
-        return strength * currentWeapon.attackValue;
+        return strength * currentWeapon.attackValue * 10000;
     }
 
     public int getDefense() {
