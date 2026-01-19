@@ -11,6 +11,7 @@ public class KeyHandler implements KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeypressed;
     GamePanel gp;
     float volume = 0.2F;
+    StringBuilder playername = new StringBuilder();
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -21,12 +22,29 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == gp.inputplayernamestate) {
             char c = e.getKeyChar();
 
-            // Allow letters, numbers, and spaces
-//            if (Character.isLetterOrDigit(c) || c == ' ') {
-                if (gp.player.playername.length() < 10) { // Max 15 characters
-                    gp.player.playername += c;
+            // backspace key
+            if(c == '\b'){
+                if(playername.length() > 0){
+                    playername.deleteCharAt(playername.length()-1);
                 }
-//            }
+                return;
+            }
+
+            // enter key
+            if (c == '\n') {
+                gp.player.playername = playername.toString();
+                return;
+            }
+
+            // length limit
+            if(gp.player.playername.length() >= 20) return;
+
+            // append printable char
+            if(!Character.isISOControl(c)) {
+                playername.append((c));
+            }
+
+            gp.player.playername = playername.toString();
         }
     }
 

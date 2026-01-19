@@ -686,10 +686,10 @@ public class UI {
             // Show placeholder text if name is empty
             x = boxX + gp.finalTileSize * 3;
             g2.setColor(new Color(150, 150, 150)); // Vague/grey color
-            g2.drawString("Maximum 10 characters", x, y);
+            g2.drawString("Maximum 20 characters", x, y);
         } else {
             // Show actual player name
-            x = boxX + gp.finalTileSize * 5;
+            x = boxX + gp.finalTileSize * 4;
             g2.setColor(Color.WHITE);
             g2.drawString(gp.player.playername, x, y);
         }
