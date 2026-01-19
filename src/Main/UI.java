@@ -389,8 +389,8 @@ public class UI {
         baseY += spacing * 4;
 
         // === SKIP INSTRUCTION ===
-        if (endingCreditTimer > 60) {
-            int skipAlpha = Math.min(200, (endingCreditTimer - 60) * 3);
+        if (endingCreditTimer > 180) {
+            int skipAlpha = Math.min(200, (endingCreditTimer - 180) * 4);
             g2.setColor(new Color(255, 255, 255, skipAlpha));
             g2.setFont(bangla.deriveFont(Font.PLAIN, 24f));
             text = "Press ENTER to skip";
