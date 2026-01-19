@@ -13,7 +13,8 @@ import java.util.ArrayList;
 public class Player extends Entity {
     public final int scrXpos;
     public final int scrYpos;
-    public String playername = "";
+    public String playername;
+
     public ArrayList<Entity> inventory = new ArrayList<>();
     GamePanel gamePanel;
     KeyHandler keyH;
