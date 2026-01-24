@@ -107,7 +107,7 @@ public class Player extends Entity {
     }
 
     public int getAttack() {
-        return strength * currentWeapon.attackValue * 10000;
+        return strength * currentWeapon.attackValue ;
     }
 
     public int getDefense() {
@@ -228,7 +228,7 @@ public class Player extends Entity {
                 gp.playSE(5, 1f);
                 int damage = gp.monster[idx].attack - defense;
                 if (damage < 0) {
-                    damage = 0;
+                    damage = 1;
                 }
                 life -= damage;
                 isinvincible = true;
@@ -307,9 +307,9 @@ public class Player extends Entity {
 
                 }
             }
-            System.out.println("Hit!!");
+            //System.out.println("Hit!!");
         } else {
-            System.out.println("Miss");
+            //System.out.println("Miss");
         }
     }
 
