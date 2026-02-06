@@ -89,7 +89,7 @@ public class DataStore {
             bw.write(coin+"\n");
             bw.write(wpn+"\n");
             bw.flush(); // ensure data is written to disk
-            System.out.println("Game saved to: " + ReadWritepath);
+            //System.out.println("Game saved to: " + ReadWritepath);
 
         }catch (Exception e){
             throw new RuntimeException("Error saving data: " + e.getMessage());
@@ -99,7 +99,7 @@ public class DataStore {
     public void readData(){
         File file = new File(ReadWritepath);
         if (!file.exists()){
-            System.out.println("No save file found, starting a new game.");
+            //System.out.println("No save file found, starting a new game.");
             return;
         }
 
@@ -107,7 +107,7 @@ public class DataStore {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             if (line == null || Integer.parseInt(line.trim()) == 0) {
-                System.out.println("Save file empty or invalid.");
+                //System.out.println("Save file empty or invalid.");
                 return;
             }
 
@@ -126,7 +126,7 @@ public class DataStore {
             coin = Integer.parseInt(br.readLine());
             wpn = br.readLine();
 
-            System.out.println("Save loaded successfully from: " + ReadWritepath);
+            //System.out.println("Save loaded successfully from: " + ReadWritepath);
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("Error reading save data: " + e.getMessage());
@@ -137,7 +137,7 @@ public class DataStore {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ReadWritepath, false))) {
             bw.write("0\n");
             bw.flush();
-            System.out.println("pSave data deleted.");
+            //System.out.println("pSave data deleted.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
