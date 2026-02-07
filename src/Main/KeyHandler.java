@@ -13,6 +13,9 @@ public class KeyHandler implements KeyListener {
     float volume = 0.2F;
     StringBuilder playername = new StringBuilder();
 
+
+    long lastTime=-1, currTime;
+
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
     }
@@ -51,6 +54,7 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int asciiCode = e.getKeyCode();
+
 
         // Title State
         if (gp.gameState == gp.titleState) {

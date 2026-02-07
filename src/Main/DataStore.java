@@ -3,16 +3,22 @@ package Main;
 import Entity.Player;
 
 import java.io.*;
+import java.util.PriorityQueue;
 
 public class DataStore {
     GamePanel gp;
     private int xPos, yPos;
-    private int lvl, life, str, atk, def, exp, nxtLvlExp, coin;
+    private int lvl, life, str, atk, def, exp, nxtLvlExp, coin, xpernd, dmgtkn;
+    private long pltm;
     private String wpn;
     private String playername;
     private final String ReadWritepath = new File("res/saveData.txt").getAbsolutePath();
+    private final String scoreBoardPath = new File("res/scoreBoard.txt").getAbsolutePath();
 
     private String mapPath;
+
+    //scoreboard!!! scoreboard!!!
+    private int[] scoreBoard = new int[]{-1, -1, -1, -1, -1};
 
     public DataStore(int x, int y,int lv,int lf, int st, int at, int df, int xp, int nlxp, int coin, String wepn, String mpath,String playername){
         this.xPos = x;
@@ -33,7 +39,6 @@ public class DataStore {
 
     public DataStore(GamePanel gp){
         this.gp = gp;
-
     }
     public void applyToPlayer(Player player) {
         player.entityWorldXPos = this.xPos;
@@ -48,6 +53,9 @@ public class DataStore {
         player.coin = this.coin;
         player.currentWeapon.name = this.wpn;
         player.playername = this.playername;
+        player.playTime = this.pltm;
+        player.totalXpEarned = this.xpernd;
+        player.dmgTaken = this.dmgtkn;
     }
 
 
@@ -72,9 +80,12 @@ public class DataStore {
             this.coin = gp.player.coin;
             this.wpn = gp.player.currentWeapon.name;
             this.playername = gp.player.playername;
+            this.pltm = gp.player.playTime;
+            this.xpernd = gp.player.totalXpEarned;
+            this.dmgtkn = gp.player.dmgTaken;
 
             bw.write(1+"\n");
-            bw.write(playername+"\n");
+            bw.write(playername +"\n");
             bw.write(mapPath+"\n");
             bw.write(xPos+"\n");
             bw.write(yPos+"\n");
@@ -88,6 +99,9 @@ public class DataStore {
             bw.write(nxtLvlExp+"\n");
             bw.write(coin+"\n");
             bw.write(wpn+"\n");
+            bw.write(pltm+"\n");
+            bw.write(xpernd+"\n");
+            bw.write(dmgtkn+"\n");
             bw.flush(); // ensure data is written to disk
             //System.out.println("Game saved to: " + ReadWritepath);
 
@@ -125,6 +139,9 @@ public class DataStore {
             nxtLvlExp = Integer.parseInt(br.readLine());
             coin = Integer.parseInt(br.readLine());
             wpn = br.readLine();
+            pltm = Long.parseLong(br.readLine());
+            xpernd = Integer.parseInt(br.readLine());
+            dmgtkn = Integer.parseInt(br.readLine());
 
             //System.out.println("Save loaded successfully from: " + ReadWritepath);
         } catch (IOException | NumberFormatException e) {
@@ -140,6 +157,83 @@ public class DataStore {
             //System.out.println("pSave data deleted.");
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public boolean loadScoreBoard(){
+        File file = new File(scoreBoardPath);
+        if(!file.exists()){
+            return false;
+        }
+        try(BufferedReader br = new BufferedReader(new FileReader(file))){
+            String line = br.readLine();
+            if(line == null || Integer.parseInt(line.trim())==0) return false;
+            int i=0;
+            while(line != null){
+                scoreBoard[i] = Integer.parseInt(line);
+                i++;
+                if(i==5) break;
+                line=br.readLine();
+            }
+            return true;
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateScoreBoard(){
+        int scr = gp.player.score;
+        //for already having scoreboard
+        if(loadScoreBoard()){
+
+            PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+            for (int i = 0; i < 5; i++) {
+                if(scoreBoard[i] != -1)
+                    pq.add(scoreBoard[i]);
+            }
+            pq.add(scr);
+            if(pq.peek() == scr && pq.size()>=5){
+                //implies that new score is unworthy to be placed into the scoreboard
+            }else{
+                if(pq.size() >= 5)// discarding lowest score
+                    while(pq.size()>=5)pq.remove();
+                int tmp = pq.size();
+                for (int i = tmp-1; i >= 0 ; i--) {
+                    if(pq.peek() != null){
+                        scoreBoard[i] = pq.remove(); // Extract_min(pq)
+                    }
+                }
+
+                //write
+                try(BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))){
+                    for (int i = 0; i < tmp; i++) {
+                        bw.write(scoreBoard[i]+"\n");
+                    }
+                    bw.flush();
+                }catch(Exception e){
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        //for first play in new device
+        else{
+            try(BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))){
+                bw.write(scr+"\n");
+                bw.flush();
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public boolean checkIfNewHS(){
+        int scr = gp.player.score;
+        if(loadScoreBoard()){
+            return scr > scoreBoard[0];
+        }
+        else{
+            return true;
         }
     }
 
@@ -194,5 +288,9 @@ public class DataStore {
     public String getPlayerName() { // Added getter
         return playername;
     }
+
+    public long getPlayTime() {return pltm;}
+    public int getXpErnd() {return xpernd;}
+    public int getdmgtkn() {return dmgtkn;}
 
 }

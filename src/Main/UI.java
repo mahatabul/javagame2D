@@ -18,7 +18,7 @@ public class UI {
     public boolean showControlsWindow = false;
     public String currentDialogue = "";
     public int slotcol = 0, slotrow = 0;
-    public String[] menuItems = {"New Game", "Load Game", "Delete Save Data", "Options", "Exit"};
+    public String[] menuItems = {"New Game", "Load Game", "Delete Save Data", "Scoreboard", "Options", "Exit"};
     public String[] pauseItems = {"Resume Game", "Save Game", "Options", "Exit Game"};
     public String[] optionsItems = {"Volume", "SE", "Controls", "Back"};
     public int levelUpmsgCntr = 0;
@@ -127,7 +127,7 @@ public class UI {
 
         }
         else if (gp.gameState==gp.gameWinstate){
-            drawGameWinScreen();
+            drawGameWinScreen(gp);
         }
         if (showgamesavescrn) {
             showMsgonscrn("Game Saved");
@@ -146,7 +146,7 @@ public class UI {
 
     }
 
-    public void drawGameWinScreen() {
+    public void drawGameWinScreen(GamePanel gp) {
 
         // Dark overlay
         g2.setColor(new Color(0, 0, 0, 180));
@@ -156,7 +156,40 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 64f));
         String text = "YOU WON!";
         int x = centerXfortext(text);
-        int y = gp.scrHeight / 2 - 40;
+        int y = gp.scrHeight / 2 - 120;
+
+        g2.setColor(Color.YELLOW);
+        g2.drawString(text, x, y);
+
+
+        //score show
+        gp.player.calculateScore();
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32f));
+        text = "YOUR SCORE: " + gp.player.score;
+        x = centerXfortext(text);
+        y += 80;
+
+        g2.setColor(Color.YELLOW);
+        g2.drawString(text, x, y);
+
+        text = "PLAYTIME: "+((gp.player.playTime/1000000000)/60)+" Min, "+((gp.player.playTime/1000000000)%60)+" Sec";
+        x = centerXfortext(text);
+        y += 40;
+
+        g2.setColor(Color.YELLOW);
+        g2.drawString(text, x, y);
+
+        text = "TOTAL XP: "+gp.player.totalXpEarned;
+        x = centerXfortext(text);
+        y += 40;
+
+        g2.setColor(Color.YELLOW);
+        g2.drawString(text, x, y);
+
+        text = "DAMAGE TAKEN: "+gp.player.dmgTaken;
+        x = centerXfortext(text);
+        y += 40;
 
         g2.setColor(Color.YELLOW);
         g2.drawString(text, x, y);
@@ -820,7 +853,7 @@ public class UI {
 
         String text = "Re-Zero";
         int x = centerXfortext(text);
-        int y = gp.finalTileSize * 3;
+        int y = gp.finalTileSize * 2;
 
         // Shadow
         g2.setColor(Color.gray);
