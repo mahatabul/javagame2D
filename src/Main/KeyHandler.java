@@ -94,6 +94,10 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.gameoverstate) {
             handlegameOver(asciiCode);
         }
+        //scoreboard state
+        else if (gp.gameState == gp.scoreBoardState) {
+            handleScoreboardState(asciiCode);
+        }
         // Dialogue State
         if (gp.gameState == gp.dialogueState) {
             handleDialoguestate(asciiCode);
@@ -326,12 +330,19 @@ public class KeyHandler implements KeyListener {
                 gp.ui.gamesaved = false;
                 // we can give a popup confirmation or not here
             } else if (gp.ui.commandNum == 3) {
-                // options
+                // scoreboard
+                gp.previousState = gp.gameState;
+                gp.gameState = gp.scoreBoardState;
+                gp.ui.commandNum = 0; // reset when entering play
+
+            } else if (gp.ui.commandNum == 4) {
+                // option
                 gp.previousState = gp.gameState;
                 gp.gameState = gp.optionState;
                 gp.ui.commandNum = 0; // reset when entering play
 
-            } else {
+            }
+            else { //exit
 //                gp.dataStorage.saveData();
                 System.exit(0);
             }
@@ -392,6 +403,14 @@ public class KeyHandler implements KeyListener {
             }
 
         }
+    }
+
+    private void handleScoreboardState(int asciiCode){
+        if(asciiCode == KeyEvent.VK_ESCAPE){
+            gp.gameState = gp.titleState;
+            gp.ui.commandNum = 0;
+        }
+
     }
 
     @Override

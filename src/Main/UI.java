@@ -41,6 +41,10 @@ public class UI {
     private Timer msgTimer;
 
 
+    private boolean scoreCommitted = false;
+
+
+
     // credit scene
     public int creditTimer = 0;
     int endingCreditTimer = 0;
@@ -97,7 +101,10 @@ public class UI {
         } else if (gp.gameState == gp.titleState) {
             drawTitleScrn(g2);
 
-        } else if (gp.gameState == gp.optionState) {
+        } else if (gp.gameState == gp.scoreBoardState){
+            drawScoreboardPage(g2, gp);
+        }
+        else if (gp.gameState == gp.optionState) {
             drawOptionScrn();
             if (showControlsWindow) {
                 drawControls(g2);
@@ -146,6 +153,43 @@ public class UI {
 
     }
 
+    private void drawScoreboardPage(Graphics2D g2, GamePanel gp) {
+        //grey background
+        g2.setColor(Color.GRAY);
+        g2.fillRect(0,0, gp.scrWidth, gp.scrHeight);
+
+
+        //dark overlay
+        g2.setColor(new Color(0,0,0,180));
+        g2.fillRect(24,24, gp.scrWidth-48, gp.scrHeight-48);
+
+        //title
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 64f));
+        String txt = "Scoreboard!!!";
+        int x = centerXfortext(txt);
+        int y = gp.scrHeight/2-120;
+
+        g2.setColor(Color.YELLOW);
+        g2.drawString(txt, x, y);
+        y += 20;
+
+
+        //scores
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32f));
+        gp.dataStorage.loadScoreBoard();
+        x = gp.scrWidth/2-48;
+        for(int i = 0, j = 1; i < 5; i++){
+            if(gp.dataStorage.scoreBoard[i] != -1){
+                y += 60;
+                txt = j+". "+ gp.dataStorage.scoreBoard[i];
+                j++;
+                g2.drawString(txt,x,y);
+                g2.setColor(Color.WHITE);
+            }
+        }
+    }
+
     public void drawGameWinScreen(GamePanel gp) {
 
         // Dark overlay
@@ -163,7 +207,11 @@ public class UI {
 
 
         //score show
-        gp.player.calculateScore();
+        if (!scoreCommitted) {
+            gp.player.calculateScore();
+            gp.dataStorage.updateScoreBoard();
+            scoreCommitted = true;
+        }
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32f));
         text = "YOUR SCORE: " + gp.player.score;
@@ -172,6 +220,22 @@ public class UI {
 
         g2.setColor(Color.YELLOW);
         g2.drawString(text, x, y);
+
+        boolean isNewHS = gp.dataStorage.checkIfNewHS();
+
+        if (!scoreCommitted) {
+            gp.player.calculateScore();
+            gp.dataStorage.updateScoreBoard();
+            scoreCommitted = true;
+        }
+
+        if (isNewHS) {
+            text = "NEW HIGHSCORE!!!";
+            x = centerXfortext(text);
+            y += 80;
+            g2.drawString(text, x, y);
+        }
+
 
         text = "PLAYTIME: "+((gp.player.playTime/1000000000)/60)+" Min, "+((gp.player.playTime/1000000000)%60)+" Sec";
         x = centerXfortext(text);

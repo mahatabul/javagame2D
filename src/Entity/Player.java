@@ -108,6 +108,7 @@ public class Player extends Entity {
         attack = getAttack();
         defense = getDefense();
 
+        //score related stats
         playTime = gamePanel.dataStorage.getPlayTime();
         totalXpEarned = gamePanel.dataStorage.getXpErnd();
         dmgTaken = gamePanel.dataStorage.getdmgtkn();

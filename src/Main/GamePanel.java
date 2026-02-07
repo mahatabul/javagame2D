@@ -96,6 +96,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int gameWinstate = 8;
     public final int startingcreditState = 9;
     public final int endingCreditState = 10;
+    public final int scoreBoardState = 11;
 
     public boolean gameFinished = false;
 

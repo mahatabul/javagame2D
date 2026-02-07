@@ -18,7 +18,7 @@ public class DataStore {
     private String mapPath;
 
     //scoreboard!!! scoreboard!!!
-    private int[] scoreBoard = new int[]{-1, -1, -1, -1, -1};
+    public int[] scoreBoard = new int[]{-1, -1, -1, -1, -1};
 
     public DataStore(int x, int y,int lv,int lf, int st, int at, int df, int xp, int nlxp, int coin, String wepn, String mpath,String playername){
         this.xPos = x;
@@ -160,77 +160,84 @@ public class DataStore {
         }
     }
 
-    public boolean loadScoreBoard(){
+    public boolean loadScoreBoard() {
         File file = new File(scoreBoardPath);
-        if(!file.exists()){
+        if (!file.exists()) {
             return false;
         }
-        try(BufferedReader br = new BufferedReader(new FileReader(file))){
-            String line = br.readLine();
-            if(line == null || Integer.parseInt(line.trim())==0) return false;
-            int i=0;
-            while(line != null){
-                scoreBoard[i] = Integer.parseInt(line);
+
+        // reset
+        for (int i = 0; i < 5; i++) scoreBoard[i] = -1;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            int i = 0;
+
+            while ((line = br.readLine()) != null && i < 5) {
+                scoreBoard[i] = Integer.parseInt(line.trim());
                 i++;
-                if(i==5) break;
-                line=br.readLine();
             }
-            return true;
-        }
-        catch (Exception e){
+
+            return i > 0;
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void updateScoreBoard(){
+
+    public void updateScoreBoard() {
         int scr = gp.player.score;
-        //for already having scoreboard
-        if(loadScoreBoard()){
 
-            PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+        if (loadScoreBoard()) {
+
+            PriorityQueue<Integer> pq = new PriorityQueue<>();
+
             for (int i = 0; i < 5; i++) {
-                if(scoreBoard[i] != -1)
+                if (scoreBoard[i] != -1) {
                     pq.add(scoreBoard[i]);
-            }
-            pq.add(scr);
-            if(pq.peek() == scr && pq.size()>=5){
-                //implies that new score is unworthy to be placed into the scoreboard
-            }else{
-                if(pq.size() >= 5)// discarding lowest score
-                    while(pq.size()>=5)pq.remove();
-                int tmp = pq.size();
-                for (int i = tmp-1; i >= 0 ; i--) {
-                    if(pq.peek() != null){
-                        scoreBoard[i] = pq.remove(); // Extract_min(pq)
-                    }
                 }
+            }
 
-                //write
-                try(BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))){
-                    for (int i = 0; i < tmp; i++) {
-                        bw.write(scoreBoard[i]+"\n");
-                    }
-                    bw.flush();
-                }catch(Exception e){
-                    throw new RuntimeException(e);
-                }
+            pq.add(scr);
+
+            // keep only top 5
+            if (pq.size() > 5) {
+                pq.poll(); // remove smallest
             }
-        }
-        //for first play in new device
-        else{
-            try(BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))){
-                bw.write(scr+"\n");
+
+            // write back in descending order
+            int idx = pq.size() - 1;
+            while (!pq.isEmpty()) {
+                scoreBoard[idx--] = pq.poll();
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))) {
+                for (int i = 0; i < 5; i++) {
+                    if (scoreBoard[i] != -1) {
+                        bw.write(scoreBoard[i] + "\n");
+                    }
+                }
                 bw.flush();
-            }catch(Exception e){
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            // first ever score
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))) {
+                bw.write(scr + "\n");
+                bw.flush();
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
+
     public boolean checkIfNewHS(){
         int scr = gp.player.score;
         if(loadScoreBoard()){
-            return scr > scoreBoard[0];
+            return scr > scoreBoard[scoreBoard.length - 1];
         }
         else{
             return true;
