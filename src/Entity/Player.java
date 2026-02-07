@@ -15,6 +15,13 @@ public class Player extends Entity {
     public final int scrYpos;
     public String playername;
 
+    // score
+    public int MaxScore = Short.MAX_VALUE;
+    public int score = 0;
+    public long playTime = 0;
+    public int totalXpEarned = 0;
+    public int dmgTaken = 0;
+
     public ArrayList<Entity> inventory = new ArrayList<>();
     GamePanel gamePanel;
     KeyHandler keyH;
@@ -59,7 +66,7 @@ public class Player extends Entity {
         level = 1;
         maxLife = 6;
         life = maxLife;
-        strength = 1;
+        strength = 1*9999999;
         dexterity = 1;
         exp = 0;
         nextlevelexp = 3;
@@ -68,6 +75,13 @@ public class Player extends Entity {
         currentShield = new woodShield(gp);
         attack = getAttack();
         defense = getDefense();
+
+        //score parameters
+          MaxScore = Short.MAX_VALUE;
+          score = 0;
+          playTime = 0;
+          totalXpEarned = 0;
+          dmgTaken = 0;
 
         projectile = new FireBall(gp);
     }
@@ -93,6 +107,11 @@ public class Player extends Entity {
         currentShield = new woodShield(gp);
         attack = getAttack();
         defense = getDefense();
+
+        //score related stats
+        playTime = gamePanel.dataStorage.getPlayTime();
+        totalXpEarned = gamePanel.dataStorage.getXpErnd();
+        dmgTaken = gamePanel.dataStorage.getdmgtkn();
 
         projectile = new FireBall(gp);
     }
@@ -231,6 +250,7 @@ public class Player extends Entity {
                     damage = 1;
                 }
                 life -= damage;
+                dmgTaken += damage;
                 isinvincible = true;
 
             }
@@ -303,6 +323,7 @@ public class Player extends Entity {
                     gp.ui.addmsg("Killed the " + gp.monster[i].name);
                     gp.ui.addmsg("Exp gained " + gp.monster[i].exp);
                     exp += gp.monster[i].exp;
+                    totalXpEarned += gp.monster[i].exp;
                     checkLevel();
 
                 }
@@ -497,4 +518,9 @@ public class Player extends Entity {
     }
 
 
+
+    // score calculation
+    public void calculateScore(){
+        score = MaxScore - ((int)(playTime/1000000000) - (dmgTaken) - (25+100-totalXpEarned))*10;
+    }
 }

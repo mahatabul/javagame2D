@@ -49,6 +49,9 @@ public class GamePanel extends JPanel implements Runnable {
     // just a flag
     boolean flag = true;
 
+    // time related for score
+    long lastPlayTimeChecked = 0;
+    boolean lastChekedFlag = false;
 
     // Save-Load related
     public DataStore dataStorage = new DataStore(this);
@@ -80,8 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
     // Game State
 
     public int gameState;
-    public final int endingCreditState = 10;
-    public final int startingcreditState = 9;
+
     public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
@@ -92,6 +94,9 @@ public class GamePanel extends JPanel implements Runnable {
     public final int characterstate = 6;
     public final int inputplayernamestate = 7;
     public final int gameWinstate = 8;
+    public final int startingcreditState = 9;
+    public final int endingCreditState = 10;
+    public final int scoreBoardState = 11;
 
     public boolean gameFinished = false;
 
@@ -123,6 +128,17 @@ public class GamePanel extends JPanel implements Runnable {
             delta += (currentTime - lastTime) / drawInterval;
             timer += (currentTime - lastTime);
             lastTime = currentTime;
+
+            if(gameState != playState && lastChekedFlag){
+                lastChekedFlag = false;
+                this.player.playTime += (currentTime - (lastPlayTimeChecked==0 ? currentTime: lastPlayTimeChecked));
+
+            }
+            if(gameState == playState && lastChekedFlag == false){
+                lastChekedFlag = true;
+                lastPlayTimeChecked = currentTime;
+            }
+
 
             if (delta >= 1) {
                 updateScr();

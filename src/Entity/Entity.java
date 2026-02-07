@@ -104,6 +104,7 @@ public class Entity {
                     damage = 0;
                 }
                 gp.player.life -= damage;
+                gp.player.dmgTaken += damage; // for score calculation purpose
 
                 gp.player.isinvincible = true;
             }
@@ -327,6 +328,7 @@ public class Entity {
 
             if (Math.pow(playerX - this.entityWorldXPos, 2) + Math.pow(playerY - this.entityWorldYPos, 2) <= Radius * Radius) {
                     // implies that player gets inside aggro range
+                // formula (Xp - Xe)^2 + (Yp - Ye)^2 < R^2
 
                     if (playerX <= this.entityWorldXPos && flag) {
                         direction = "left";
