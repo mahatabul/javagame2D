@@ -4,7 +4,8 @@ out/
 !**/src/test/**/out/
 .kotlin
 
-res/saveData.txt
+res/*
+!res/.gitkeep
 
 ### Eclipse ###
 .apt_generated
