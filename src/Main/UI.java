@@ -178,16 +178,24 @@ public class UI {
         g2.setColor(Color.WHITE);
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32f));
         gp.dataStorage.loadScoreBoard();
-        x = gp.scrWidth/2-48;
-        for(int i = 0, j = 1; i < 5; i++){
-            if(gp.dataStorage.scoreBoard[i] != -1){
-                y += 60;
-                txt = j+". "+ gp.dataStorage.scoreBoard[i];
-                j++;
-                g2.drawString(txt,x,y);
-                g2.setColor(Color.WHITE);
-            }
-        }
+        x = gp.scrWidth/3;
+//        for(int i = 0, j = 1; i < 5; i++){
+//            if(gp.dataStorage.scoreBoard[i] != -1){
+//                y += 60;
+//                txt = j+". "+ gp.dataStorage.scoreBoard[i];
+//                j++;
+//                g2.drawString(txt,x,y);
+//                g2.setColor(Color.WHITE);
+//            }
+//        }
+        y += 60;
+        txt = "Current Score: "+ gp.dataStorage.scoreBoard[0];
+        g2.drawString(txt,x,y);
+        g2.setColor(Color.WHITE);
+        y += 60;
+        txt = "Highest Score: "+ gp.dataStorage.scoreBoard[1];
+        g2.drawString(txt,x,y);
+        g2.setColor(Color.WHITE);
     }
 
     public void drawGameWinScreen(GamePanel gp) {

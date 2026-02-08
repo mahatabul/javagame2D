@@ -66,7 +66,7 @@ public class Player extends Entity {
         level = 1;
         maxLife = 6;
         life = maxLife;
-        strength = 1*9999999;
+        strength = 1*99;
         dexterity = 1;
         exp = 0;
         nextlevelexp = 3;
@@ -342,7 +342,7 @@ public class Player extends Entity {
             level++;
             nextlevelexp = nextlevelexp * 2;
             maxLife += 2;
-            strength++;
+            strength*=2;
             dexterity++;
             attack = getAttack();
             defense = getDefense();
@@ -521,6 +521,10 @@ public class Player extends Entity {
 
     // score calculation
     public void calculateScore(){
-        score = MaxScore - ((int)(playTime/1000000000) - (dmgTaken) - (25+100-totalXpEarned))*10;
+//        score = MaxScore - ((int)(playTime/1000000000) - (dmgTaken) - (25+100-totalXpEarned))*10;
+        int timeInSeconds = (int)(playTime / 1000000000);
+        int xpPenalty = 125 - totalXpEarned;  // penalty if you didn't get max XP
+
+        score = MaxScore - (timeInSeconds + dmgTaken + xpPenalty) * 10;
     }
 }

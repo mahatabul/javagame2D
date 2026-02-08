@@ -3,6 +3,7 @@ package Main;
 import Entity.Player;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 public class DataStore {
@@ -18,7 +19,7 @@ public class DataStore {
     private String mapPath;
 
     //scoreboard!!! scoreboard!!!
-    public int[] scoreBoard = new int[]{-1, -1, -1, -1, -1};
+    public int[] scoreBoard = new int[]{-1, -1};
 
     public DataStore(int x, int y,int lv,int lf, int st, int at, int df, int xp, int nlxp, int coin, String wepn, String mpath,String playername){
         this.xPos = x;
@@ -165,15 +166,14 @@ public class DataStore {
         if (!file.exists()) {
             return false;
         }
-
         // reset
-        for (int i = 0; i < 5; i++) scoreBoard[i] = -1;
+        Arrays.fill(scoreBoard, -1);
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             int i = 0;
 
-            while ((line = br.readLine()) != null && i < 5) {
+            while ((line = br.readLine()) != null && i < scoreBoard.length) {
                 scoreBoard[i] = Integer.parseInt(line.trim());
                 i++;
             }
@@ -182,54 +182,30 @@ public class DataStore {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
     }
 
 
     public void updateScoreBoard() {
         int scr = gp.player.score;
 
-        if (loadScoreBoard()) {
+        loadScoreBoard();
 
-            PriorityQueue<Integer> pq = new PriorityQueue<>();
+        // Update current score
+        scoreBoard[0] = scr;
 
-            for (int i = 0; i < 5; i++) {
-                if (scoreBoard[i] != -1) {
-                    pq.add(scoreBoard[i]);
-                }
-            }
+        // Update highest score if current beats it
+        if (scr > scoreBoard[1]) {
+            scoreBoard[1] = scr;
+        }
 
-            pq.add(scr);
-
-            // keep only top 5
-            if (pq.size() > 5) {
-                pq.poll(); // remove smallest
-            }
-
-            // write back in descending order
-            int idx = pq.size() - 1;
-            while (!pq.isEmpty()) {
-                scoreBoard[idx--] = pq.poll();
-            }
-
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))) {
-                for (int i = 0; i < 5; i++) {
-                    if (scoreBoard[i] != -1) {
-                        bw.write(scoreBoard[i] + "\n");
-                    }
-                }
-                bw.flush();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-        } else {
-            // first ever score
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))) {
-                bw.write(scr + "\n");
-                bw.flush();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        // Write both scores to file
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))) {
+            bw.write(scoreBoard[0] + "\n");  // current score
+            bw.write(scoreBoard[1] + "\n");  // highest score
+            bw.flush();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -237,7 +213,7 @@ public class DataStore {
     public boolean checkIfNewHS(){
         int scr = gp.player.score;
         if(loadScoreBoard()){
-            return scr > scoreBoard[scoreBoard.length - 1];
+            return scr > scoreBoard[1];
         }
         else{
             return true;
