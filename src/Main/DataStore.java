@@ -187,23 +187,22 @@ public class DataStore {
 
 
     public void updateScoreBoard() {
+
         int scr = gp.player.score;
 
         loadScoreBoard();
 
-        // Update current score
+        // Always store last score
         scoreBoard[0] = scr;
 
-        // Update highest score if current beats it
+        // Only update high score if beaten
         if (scr > scoreBoard[1]) {
             scoreBoard[1] = scr;
         }
 
-        // Write both scores to file
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(scoreBoardPath))) {
-            bw.write(scoreBoard[0] + "\n");  // current score
-            bw.write(scoreBoard[1] + "\n");  // highest score
-            bw.flush();
+            bw.write(scoreBoard[0] + "\n");
+            bw.write(scoreBoard[1] + "\n");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -212,12 +211,10 @@ public class DataStore {
 
     public boolean checkIfNewHS(){
         int scr = gp.player.score;
-        if(loadScoreBoard()){
-            return scr > scoreBoard[1];
-        }
-        else{
+        if(!loadScoreBoard()){
             return true;
         }
+        return scr > scoreBoard[1];
     }
 
     public String getMapPath() {

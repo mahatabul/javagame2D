@@ -96,7 +96,6 @@ public class UI {
         } else if (gp.gameState == gp.endingCreditState) {
             drawEndingCreditScreen();
         } else if (gp.gameState == gp.pauseState) {
-            drawPlayerLife();
             drawPauseScrn();
         } else if (gp.gameState == gp.titleState) {
             drawTitleScrn(g2);
@@ -126,6 +125,7 @@ public class UI {
             inputplayername();
         } else if (gp.gameState == gp.playState) {
             // Play state in here
+            drawPlayerScore();
             drawPlayerLife();
             drawMessage();
             if (LEVELEDUP) {
@@ -146,7 +146,7 @@ public class UI {
             showMsgonscrn("No Saved Game");
         }
 
-        if (!gp.gameFinished){
+        if (!gp.gameFinished && gp.gameState==gp.playState){
 
             showAreaName(gp.player.entityWorldXPos, gp.player.entityWorldYPos);
         }
@@ -179,15 +179,6 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32f));
         gp.dataStorage.loadScoreBoard();
         x = gp.scrWidth/3;
-//        for(int i = 0, j = 1; i < 5; i++){
-//            if(gp.dataStorage.scoreBoard[i] != -1){
-//                y += 60;
-//                txt = j+". "+ gp.dataStorage.scoreBoard[i];
-//                j++;
-//                g2.drawString(txt,x,y);
-//                g2.setColor(Color.WHITE);
-//            }
-//        }
         y += 60;
         txt = "Current Score: "+ gp.dataStorage.scoreBoard[0];
         g2.drawString(txt,x,y);
@@ -845,7 +836,24 @@ public class UI {
             }
         }
     }
+    public void drawPlayerScore() {
+        int x = gp.finalTileSize * 11;
+        int y = gp.finalTileSize;
+//        gp.player.calculateScore();
+        int score = gp.player.score;
 
+        // Set font and color
+        g2.setFont(Jersey.deriveFont(Font.BOLD, 32f));
+        g2.setColor(Color.WHITE);
+
+        // Draw shadow for better visibility
+        g2.setColor(Color.BLACK);
+        g2.drawString("Score: " + score, x + 2, y + 2);
+
+        // Draw actual text
+        g2.setColor(Color.WHITE);
+        g2.drawString("Score: " + score, x, y);
+    }
     public void drawPauseScrn() {
         // 1. Draw semi-transparent dark overlay
         g2.setColor(new Color(0, 0, 0, 150)); // black with 150 alpha

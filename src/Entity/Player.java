@@ -250,6 +250,7 @@ public class Player extends Entity {
                     damage = 1;
                 }
                 life -= damage;
+                score -= (int)(damage*0.3);
                 dmgTaken += damage;
                 isinvincible = true;
 
@@ -323,6 +324,7 @@ public class Player extends Entity {
                     gp.ui.addmsg("Killed the " + gp.monster[i].name);
                     gp.ui.addmsg("Exp gained " + gp.monster[i].exp);
                     exp += gp.monster[i].exp;
+                    score += (gp.monster[i].exp * 20);
                     totalXpEarned += gp.monster[i].exp;
                     checkLevel();
 
@@ -521,10 +523,9 @@ public class Player extends Entity {
 
     // score calculation
     public void calculateScore(){
-//        score = MaxScore - ((int)(playTime/1000000000) - (dmgTaken) - (25+100-totalXpEarned))*10;
         int timeInSeconds = (int)(playTime / 1000000000);
         int xpPenalty = 125 - totalXpEarned;  // penalty if you didn't get max XP
 
-        score = MaxScore - (timeInSeconds + dmgTaken + xpPenalty) * 10;
+        score = score - (timeInSeconds + dmgTaken + xpPenalty) * 5;
     }
 }
