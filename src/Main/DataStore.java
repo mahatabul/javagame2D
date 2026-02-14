@@ -13,15 +13,17 @@ public class DataStore {
     private long pltm;
     private String wpn;
     private String playername;
-    private final String ReadWritepath = new File("res/saveData.txt").getAbsolutePath();
-    private final String scoreBoardPath = new File("res/scoreBoard.txt").getAbsolutePath();
+    // ✅ NEW: Save files in user's home directory
+    private static final String GAME_DIR = System.getProperty("user.home") + "/.rezero-game/";
+    private final String ReadWritepath;
+    private final String scoreBoardPath;
 
     private String mapPath;
 
     //scoreboard!!! scoreboard!!!
     public int[] scoreBoard = new int[]{-1, -1};
 
-    public DataStore(int x, int y,int lv,int lf, int st, int at, int df, int xp, int nlxp, int coin, String wepn, String mpath,String playername){
+    public DataStore(int x, int y, int lv, int lf, int st, int at, int df, int xp, int nlxp, int coin, String wepn, String mpath, String playername, String readWritepath, String scoreBoardPath, String scoreBoardPath1){
         this.xPos = x;
         this.yPos = y;
         this.mapPath = mpath;
@@ -36,10 +38,27 @@ public class DataStore {
         this.coin = coin;
         this.wpn = wepn;
         this.playername = playername;
+
+        // ✅ Initialize paths
+        File gameDir = new File(GAME_DIR);
+        if (!gameDir.exists()) {
+            gameDir.mkdirs();
+        }
+        this.ReadWritepath = GAME_DIR + "saveData.txt";
+        this.scoreBoardPath = GAME_DIR + "scoreBoard.txt";
     }
 
     public DataStore(GamePanel gp){
         this.gp = gp;
+        // ✅ Create game directory if it doesn't exist
+        File gameDir = new File(GAME_DIR);
+        if (!gameDir.exists()) {
+            gameDir.mkdirs();
+        }
+
+        // ✅ Set paths in user directory
+        ReadWritepath = GAME_DIR + "saveData.txt";
+        scoreBoardPath = GAME_DIR + "scoreBoard.txt";
     }
     public void applyToPlayer(Player player) {
         player.entityWorldXPos = this.xPos;

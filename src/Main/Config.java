@@ -4,13 +4,24 @@ import java.io.*;
 
 public class Config {
     GamePanel gp;
+    private static final String GAME_DIR = System.getProperty("user.home") + "/.rezero-game/";
+    private final String configPath;
 
     public Config(GamePanel gp) {
         this.gp = gp;
+
+        // ✅ Create game directory if it doesn't exist
+        File gameDir = new File(GAME_DIR);
+        if (!gameDir.exists()) {
+            gameDir.mkdirs();
+        }
+
+        // ✅ Config file in user directory
+        configPath = GAME_DIR + "config.txt";
     }
 
     public void saveConfig() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("res/Config.txt"))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(configPath))) {
             // Save volume
             bw.write("musicVolume=" + gp.ui.musicVolume);
             bw.newLine();
@@ -20,28 +31,34 @@ public class Config {
             bw.newLine();
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.err.println("Error saving config: " + e.getMessage());
         }
     }
 
     public void loadConfig() {
-        // First, try local file (user overrides)
-        File localFile = new File("res/Config.txt");
-        if (localFile.exists()) {
-            loadFromFile(localFile);
-            return;
-        }
+        File configFile = new File(configPath);
 
-        // Fallback to resources (default config)
-        InputStream resourceStream = getClass().getResourceAsStream("res/Config.txt");
-        if (resourceStream != null) {
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceStream))) {
-                loadFromReader(br);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        if (configFile.exists()) {
+            // Load user's saved config
+            loadFromFile(configFile);
+        } else {
+            // ✅ Try to load default config from JAR resources
+            InputStream resourceStream = getClass().getResourceAsStream("/Config.txt");
+            if (resourceStream != null) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceStream))) {
+                    loadFromReader(br);
+                    // Save defaults to user directory for next time
+                    saveConfig();
+                } catch (IOException e) {
+                    System.err.println("Error loading default config: " + e.getMessage());
+                    setDefaults();
+                }
+            } else {
+                // No default config found, use hardcoded defaults
+                setDefaults();
             }
         }
-        // If no file at all, use defaults (musicVolume=0.5F, seEnabled=true)
     }
 
     // Helper: Load from a File
@@ -49,7 +66,8 @@ public class Config {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             loadFromReader(br);
         } catch (IOException | NumberFormatException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error loading config file: " + e.getMessage());
+            setDefaults();
         }
     }
 
@@ -71,5 +89,14 @@ public class Config {
                 gp.ui.seEnabled = se;
             }
         }
+    }
+
+    // ✅ Set default values
+    private void setDefaults() {
+        gp.ui.musicVolume = 0.1f;
+        gp.ui.seEnabled = true;
+        gp.music.setVolume(gp.ui.musicVolume);
+        // Save defaults to file
+        saveConfig();
     }
 }

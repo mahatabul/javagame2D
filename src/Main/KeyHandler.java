@@ -13,9 +13,6 @@ public class KeyHandler implements KeyListener {
     float volume = 0.2F;
     StringBuilder playername = new StringBuilder();
 
-
-    long lastTime=-1, currTime;
-
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
     }
@@ -53,62 +50,79 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int asciiCode = e.getKeyCode();
 
+        int code = e.getKeyCode();
 
-        // Title State
+        // ---- STATE ROUTING ----
         if (gp.gameState == gp.titleState) {
-            try {
-                handleTitlestate(asciiCode);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
-        } else if (gp.gameState == gp.gameWinstate) {
-            handlegameWin(asciiCode);
-        } else if (gp.gameState == gp.endingCreditState) {
-            handleEndingCreditState(asciiCode);
-        } else if (gp.gameState == gp.startingcreditState) {
-            handleCreditState(asciiCode);
-        } else if (gp.gameState == gp.inputplayernamestate) {
-            handleNameInputState(asciiCode);
+            try { handleTitlestate(code); } catch (Exception ex) { ex.printStackTrace(); }
+            return;
         }
 
-        // Play state
-        else if (gp.gameState == gp.playState) {
-            handlePlaystate(asciiCode);
+        if (gp.gameState == gp.gameWinstate) {
+            handlegameWin(code);
+            return;
         }
 
-        // character state
+        if (gp.gameState == gp.endingCreditState) {
+            handleEndingCreditState(code);
+            return;
+        }
+
+        if (gp.gameState == gp.startingcreditState) {
+            handleCreditState(code);
+            return;
+        }
+
+        if (gp.gameState == gp.inputplayernamestate) {
+            handleNameInputState(code);
+            return;
+        }
+
+        if (gp.gameState == gp.playState) {
+            handlePlaystate(code);
+            // no return — allow global keys like P
+        }
+
         else if (gp.gameState == gp.characterstate) {
-            handleCharacterstate(asciiCode);
+            handleCharacterstate(code);
+            return;
         }
-        // Pause State
+
         else if (gp.gameState == gp.pauseState) {
-            handlePausestate(asciiCode);
+            handlePausestate(code);
+            return;
         }
-        // Option State
+
         else if (gp.gameState == gp.optionState) {
-            handleOptionstate(asciiCode);
+            handleOptionstate(code);
+            return;
         }
-        // Game Over State
+
         else if (gp.gameState == gp.gameoverstate) {
-            handlegameOver(asciiCode);
+            handlegameOver(code);
+            return;
         }
-        //scoreboard state
+
         else if (gp.gameState == gp.scoreBoardState) {
-            handleScoreboardState(asciiCode);
-        }
-        // Dialogue State
-        if (gp.gameState == gp.dialogueState) {
-            handleDialoguestate(asciiCode);
+            handleScoreboardState(code);
+            return;
         }
 
-        if (asciiCode == KeyEvent.VK_P && (gp.gameState == gp.playState || gp.gameState == gp.pauseState)) {
+        else if (gp.gameState == gp.dialogueState) {
+            handleDialoguestate(code);
+            return;
+        }
+
+        // ---- GLOBAL KEYS ----
+        if (code == KeyEvent.VK_P &&
+                (gp.gameState == gp.playState || gp.gameState == gp.pauseState)) {
+
             gp.playSE(1, volume);
-            gp.gameState = (gp.gameState == gp.playState) ? gp.pauseState : gp.playState;
+            gp.gameState = (gp.gameState == gp.playState)
+                    ? gp.pauseState
+                    : gp.playState;
         }
-
-
     }
 
     private void handleCharacterstate(int asciiCode) {
@@ -292,12 +306,13 @@ public class KeyHandler implements KeyListener {
                 gp.restart();
                 gp.gameState = gp.inputplayernamestate;
 
-            } else if (gp.ui.commandNum == 1) {
-
-                // Load game - check save file directly
-                File saveFile = new File("res/saveData.txt");
+            }
+            else if (gp.ui.commandNum == 1) {
+                // ✅ Load game - use the same path as DataStore
+                String saveDir = System.getProperty("user.home") + "/.rezero-game/";
+                File saveFile = new File(saveDir + "saveData.txt");
                 gp.ui.gameDeleted = false;
-                // Load game
+
                 if (saveFile.exists()) {
                     try {
                         BufferedReader br = new BufferedReader(new FileReader(saveFile));
@@ -311,6 +326,8 @@ public class KeyHandler implements KeyListener {
                     } catch (Exception e) {
                         gp.ui.gameDeleted = false;
                     }
+                } else {
+                    gp.ui.gameDeleted = true;
                 }
 
                 if (!gp.ui.gameDeleted) {
@@ -322,7 +339,7 @@ public class KeyHandler implements KeyListener {
                     // No valid save - show message
                     gp.ui.shownosavemsg();
                 }
-            } else if (gp.ui.commandNum == 2) {
+            }else if (gp.ui.commandNum == 2) {
                 // delete save data
                 gp.ui.showdeletemsg();
                 gp.dataStorage.deleteData();

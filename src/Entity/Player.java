@@ -250,7 +250,7 @@ public class Player extends Entity {
                     damage = 1;
                 }
                 life -= damage;
-                score -= (int)(damage*0.3);
+                score -= damage*2;
                 dmgTaken += damage;
                 isinvincible = true;
 
