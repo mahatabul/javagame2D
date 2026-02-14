@@ -1,17 +1,1 @@
-1
-htht
-/Mapping Data/forest.txt
-1412
-2156
-1
-6
-99
-99
-1
-0
-3
-0
-Wood Sword
-11725525492
-0
 0
