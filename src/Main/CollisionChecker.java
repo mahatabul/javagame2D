@@ -2,8 +2,6 @@ package Main;
 
 import Entity.Entity;
 
-import java.lang.foreign.StructLayout;
-
 public class CollisionChecker {
     GamePanel gamePanel;
 
