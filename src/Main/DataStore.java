@@ -4,7 +4,6 @@ import Entity.Player;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.PriorityQueue;
 
 public class DataStore {
     GamePanel gp;
@@ -13,7 +12,7 @@ public class DataStore {
     private long pltm;
     private String wpn;
     private String playername;
-    // ✅ NEW: Save files in user's home directory
+    // Save files in user's home directory
     private static final String GAME_DIR = System.getProperty("user.home") + "/.rezero-game/";
     private final String ReadWritepath;
     private final String scoreBoardPath;
@@ -39,7 +38,7 @@ public class DataStore {
         this.wpn = wepn;
         this.playername = playername;
 
-        // ✅ Initialize paths
+        // initialize paths
         File gameDir = new File(GAME_DIR);
         if (!gameDir.exists()) {
             gameDir.mkdirs();
@@ -50,13 +49,13 @@ public class DataStore {
 
     public DataStore(GamePanel gp){
         this.gp = gp;
-        // ✅ Create game directory if it doesn't exist
+        // creates game directory if it doesn't exist
         File gameDir = new File(GAME_DIR);
         if (!gameDir.exists()) {
             gameDir.mkdirs();
         }
 
-        // ✅ Set paths in user directory
+        // setting paths in user directory
         ReadWritepath = GAME_DIR + "saveData.txt";
         scoreBoardPath = GAME_DIR + "scoreBoard.txt";
     }
@@ -123,7 +122,7 @@ public class DataStore {
             bw.write(xpernd+"\n");
             bw.write(dmgtkn+"\n");
             bw.flush(); // ensure data is written to disk
-            //System.out.println("Game saved to: " + ReadWritepath);
+
 
         }catch (Exception e){
             throw new RuntimeException("Error saving data: " + e.getMessage());
@@ -133,7 +132,6 @@ public class DataStore {
     public void readData(){
         File file = new File(ReadWritepath);
         if (!file.exists()){
-            //System.out.println("No save file found, starting a new game.");
             return;
         }
 
@@ -141,7 +139,6 @@ public class DataStore {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             if (line == null || Integer.parseInt(line.trim()) == 0) {
-                //System.out.println("Save file empty or invalid.");
                 return;
             }
 
@@ -163,7 +160,6 @@ public class DataStore {
             xpernd = Integer.parseInt(br.readLine());
             dmgtkn = Integer.parseInt(br.readLine());
 
-            //System.out.println("Save loaded successfully from: " + ReadWritepath);
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("Error reading save data: " + e.getMessage());
@@ -174,7 +170,6 @@ public class DataStore {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ReadWritepath, false))) {
             bw.write("0\n");
             bw.flush();
-            //System.out.println("pSave data deleted.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -211,10 +206,8 @@ public class DataStore {
 
         loadScoreBoard();
 
-        // Always store last score
         scoreBoard[0] = scr;
 
-        // Only update high score if beaten
         if (scr > scoreBoard[1]) {
             scoreBoard[1] = scr;
         }
