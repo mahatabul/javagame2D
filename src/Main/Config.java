@@ -10,13 +10,13 @@ public class Config {
     public Config(GamePanel gp) {
         this.gp = gp;
 
-        // ✅ Create game directory if it doesn't exist
+        //  Create game directory if it doesn't exist
         File gameDir = new File(GAME_DIR);
         if (!gameDir.exists()) {
             gameDir.mkdirs();
         }
 
-        // ✅ Config file in user directory
+        //  Config file in user directory
         configPath = GAME_DIR + "config.txt";
     }
 
@@ -31,8 +31,8 @@ public class Config {
             bw.newLine();
 
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Error saving config: " + e.getMessage());
+            throw new RuntimeException(e);
+//            System.err.println("Error saving config: " + e.getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ public class Config {
             // Load user's saved config
             loadFromFile(configFile);
         } else {
-            // ✅ Try to load default config from JAR resources
+            //  Try to load default config from JAR resources
             InputStream resourceStream = getClass().getResourceAsStream("/Config.txt");
             if (resourceStream != null) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceStream))) {
@@ -91,7 +91,7 @@ public class Config {
         }
     }
 
-    // ✅ Set default values
+    //  Set default values
     private void setDefaults() {
         gp.ui.musicVolume = 0.1f;
         gp.ui.seEnabled = true;

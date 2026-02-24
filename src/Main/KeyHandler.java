@@ -54,7 +54,7 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
 
         if (gp.gameState == gp.titleState) {
-            try { handleTitlestate(code); } catch (Exception ex) { ex.printStackTrace(); }
+            try { handleTitlestate(code); } catch (Exception ex) { throw new RuntimeException(ex); }
             return;
         }
 
