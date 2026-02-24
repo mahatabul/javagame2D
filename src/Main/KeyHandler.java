@@ -24,7 +24,7 @@ public class KeyHandler implements KeyListener {
 
             // backspace key
             if(c == '\b'){
-                if(playername.length() > 0){
+                if(!playername.isEmpty()){
                     playername.deleteCharAt(playername.length()-1);
                 }
                 return;
@@ -53,7 +53,6 @@ public class KeyHandler implements KeyListener {
 
         int code = e.getKeyCode();
 
-        // ---- STATE ROUTING ----
         if (gp.gameState == gp.titleState) {
             try { handleTitlestate(code); } catch (Exception ex) { ex.printStackTrace(); }
             return;
@@ -114,7 +113,6 @@ public class KeyHandler implements KeyListener {
             return;
         }
 
-        // ---- GLOBAL KEYS ----
         if (code == KeyEvent.VK_P &&
                 (gp.gameState == gp.playState || gp.gameState == gp.pauseState)) {
 
@@ -235,14 +233,11 @@ public class KeyHandler implements KeyListener {
                 gp.gameState = gp.optionState;
                 gp.ui.commandNum = 0; // reset when entering play
 
-            } else if (gp.ui.commandNum == 3) {
+            } else {
                 // Exit the game
                 gp.gameState = gp.titleState;
                 gp.ui.commandNum = 0; // reset when entering play
 
-            } else {
-
-                // empty
             }
         }
     }
@@ -300,15 +295,11 @@ public class KeyHandler implements KeyListener {
         if (asciiCode == KeyEvent.VK_ENTER) {
             gp.playSE(1, volume);
             if (gp.ui.commandNum == 0) {
-                // Enter New Game
-//                gp.assetHandler.respawnMonster();  // the monster fail to respawn bug fix
-//                gp.player.setDefaultValue();
                 gp.restart();
                 gp.gameState = gp.inputplayernamestate;
 
             }
             else if (gp.ui.commandNum == 1) {
-                // ✅ Load game - use the same path as DataStore
                 String saveDir = System.getProperty("user.home") + "/.rezero-game/";
                 File saveFile = new File(saveDir + "saveData.txt");
                 gp.ui.gameDeleted = false;
@@ -368,7 +359,7 @@ public class KeyHandler implements KeyListener {
 
     private void handleNameInputState(int asciiCode) {
         if (asciiCode == KeyEvent.VK_ENTER) {
-            if (gp.player.playername.trim().length() > 0) { // Make sure name is not empty
+            if (!gp.player.playername.trim().isEmpty()) { // Make sure name is not empty
                 gp.playSE(1, volume);
                 gp.gameState = gp.playState; // Start the game
 //                gp.playMusic(0); // Start game music
@@ -377,7 +368,7 @@ public class KeyHandler implements KeyListener {
         }
 
         if (asciiCode == KeyEvent.VK_BACK_SPACE) {
-            if (gp.player.playername.length() > 0) {
+            if (!gp.player.playername.isEmpty()) {
                 gp.player.playername = gp.player.playername.substring(0, gp.player.playername.length() - 1);
             }
         }
